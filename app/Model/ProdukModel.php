@@ -19,4 +19,15 @@ class ProdukModel extends Model
 
     protected array $casts = [];
     protected array $castHandlers = [];
+
+    public function getById($id = null): object
+    {
+        $data = $this->db->table($this->table)
+            ->select('produk.*, merek.nama_merek')
+            ->join('merek', 'merek.id_merek = produk.id_merek', 'left')
+            ->where('produk.id_produk', $id)
+            ->get()
+            ->getRow();
+        return $data;
+    }
 }

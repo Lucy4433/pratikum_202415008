@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Model;
 
 use CodeIgniter\Model;
 
-class PembelianModel extends Model
+class UserModel extends Model
 {
-    protected $table            = 'pembelian';
-    protected $primaryKey       = 'id_pembelian';
+    protected $table            = 'User';
+    protected $primaryKey       = 'id_user';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_pembelian', 'no_pembelian', 'tanggal_pembelian', 'total', 'id_suplier'];
+    protected $allowedFields    = ['username', 'password', 'role'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
