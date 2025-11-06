@@ -24,6 +24,24 @@ class Merek extends BaseController
     public function tambah()
     {
         if ($this->request->getMethod() == 'POST') {
+            $rules = [
+                'nama_merek' => [
+                    'label' => 'Nama Merek',
+                    'rules' => 'required|is_unique[merek.nama_merek]',
+                    'errors' => [
+                        'required' => '{field} harus diisi.',
+                        'is_unique' => '{field} sudah ada di database.'
+                    ]
+                ]
+            ];
+
+            // Jalankan validasi
+            if (!$this->validate($rules)) {
+                // Jika validasi gagal, kirim kembali view dengan error
+                return view('merek/tambah', [
+                    'validation' => $this->validator
+                ]);
+            }
             $this->model->save($this->request->getPost());
             return redirect()->to(base_url('merek'));
         }

@@ -3,46 +3,46 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\ProdukModel;
+use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Produk extends BaseController
+class User extends BaseController
 {
-     protected $model;
+    protected $model;
 
-     public function __construct()
+    public function __construct()
     {
-        $this->model = new ProdukModel();
+        $this->model = new UserModel();
     }
 
     public function index()
     {
         $data['model'] =  $this->model->findAll();
-        return view('produk/index', $data);
+        return view('user/index', $data);
     }
 
     public function tambah()
     {
         if ($this->request->getMethod() == 'POST') {
             $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('produk'));
+            return redirect()->to(base_url('user'));
         }
-        return view('produk/tambah');
+        return view('user/tambah');
     }
 
     public function ubah($id = null)
     {
         if ($this->request->getMethod() == 'POST') {
             $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('produk'));
+            return redirect()->to(base_url('user'));
         }
-        $data['model'] =  $this->model->where('id_produk', $id)->first();
-        return view('produk/ubah', $data);
+        $data['model'] =  $this->model->where('id_user', $id)->first();
+        return view('user/ubah', $data);
     }
 
     public function hapus($id = null)
     {
         $this->model->delete($id);
-        return redirect()->to(base_url('produk'));
+        return redirect()->to(base_url('user'));
     }
 }

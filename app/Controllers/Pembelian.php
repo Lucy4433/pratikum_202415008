@@ -3,46 +3,46 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\ProdukModel;
+use App\Models\PembelianModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Produk extends BaseController
+class Pembelian extends BaseController
 {
-     protected $model;
+    protected $model;
 
      public function __construct()
     {
-        $this->model = new ProdukModel();
+        $this->model = new PembelianModel();
     }
 
     public function index()
     {
         $data['model'] =  $this->model->findAll();
-        return view('produk/index', $data);
+        return view('pembelian/index', $data);
     }
 
     public function tambah()
     {
         if ($this->request->getMethod() == 'POST') {
             $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('produk'));
+            return redirect()->to(base_url('pembelian'));
         }
-        return view('produk/tambah');
+        return view('pembelian/tambah');
     }
 
     public function ubah($id = null)
     {
         if ($this->request->getMethod() == 'POST') {
             $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('produk'));
+            return redirect()->to(base_url('pembelian'));
         }
-        $data['model'] =  $this->model->where('id_produk', $id)->first();
-        return view('produk/ubah', $data);
+        $data['model'] =  $this->model->where('id_pembelian', $id)->first();
+        return view('pembelian/ubah', $data);
     }
 
     public function hapus($id = null)
     {
         $this->model->delete($id);
-        return redirect()->to(base_url('produk'));
+        return redirect()->to(base_url('pembelian'));
     }
 }

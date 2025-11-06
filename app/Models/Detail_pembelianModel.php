@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MerekModel extends Model
+class Detail_pembelianModel extends Model
 {
-    protected $table            = 'merek';
-    protected $primaryKey       = 'id_merek';
+    protected $table            = 'detail_pembelian';
+    protected $primaryKey       = 'id_detail';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_merek','nama_merek'];
+    protected $allowedFields    = ['id_detail', 'id_pembelian', 'id_produk', 'jumlah', 'harga_satuan'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
