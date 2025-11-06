@@ -12,7 +12,7 @@ class Detail_orderModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_order', 'jumlah_beli', 'harga_satuan'];
+    protected $allowedFields    = ['id_order', 'id_produk', 'jumlah_beli', 'harga_satuan'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
