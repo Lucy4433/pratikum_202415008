@@ -20,7 +20,7 @@ class Detail_order extends BaseController
         $data['model'] =  $this->model->findAll();
         return view('detail_order/index', $data);
     }
-
+    
     public function tambah()
     {
         if ($this->request->getMethod() == 'POST') {
