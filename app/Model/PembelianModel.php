@@ -20,14 +20,5 @@ class PembelianModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    public function getById($id = null): object
-    {
-        $data = $this->db->table($this->table)
-            ->select('pembelian.*, supplier.nama_suplier, supplier.alamat, supplier.no_telp')
-            ->join('supplier', 'supplier.id_supplier = pembelian.id_supplier', 'left')
-            ->where('pembelian.id_pembelian', $id)
-            ->get()
-            ->getRow(); 
-        return $data;
-    }
+   
 }

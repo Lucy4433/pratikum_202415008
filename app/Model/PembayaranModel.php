@@ -20,14 +20,5 @@ class PembayaranModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    public function getById($id = null)
-    {
-        return $this->db->table($this->table)
-            ->select('pembayaran.*, orders.no_penjualan, user.username')
-            ->join('orders', 'orders.id_order = pembayaran.id_order', 'left')
-            ->join('user', 'user.id_user = orders.id_user', 'left')
-            ->where('pembayaran.id_pembayaran', $id)
-            ->get()
-            ->getRow();
-    }
+
 }
