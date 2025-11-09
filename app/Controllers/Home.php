@@ -5,6 +5,6 @@ class Produk extends BaseController
 {
     public function index()
     {
-        return view('OK'); // atau return "OK";
+        return view('layout/index'); // atau return "OK";
     }
 }
