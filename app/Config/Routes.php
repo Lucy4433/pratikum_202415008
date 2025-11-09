@@ -5,11 +5,12 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'produk::index');
-$routes->get('/produk', 'Produk::index');
+
+$routes->get('/', 'Dashboard::index');
+$routes->get('dashbaord','Dashboard::index');
 
 $routes->get('/', 'welcome_massage::index');
-$routes->get('/welcome_massage', 'welcome_massage::index');
+
 
 $routes->group('detailOrder', function($routes){
     $routes->get('/', 'DetailOrder::index');

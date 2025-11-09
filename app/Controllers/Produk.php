@@ -8,9 +8,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Produk extends BaseController
 {
-     protected $model;
+    protected $model;
 
-     public function __construct()
+    public function __construct()
     {
         $this->model = new ProdukModel();
     }
