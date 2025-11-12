@@ -4,7 +4,18 @@
             <a class="nav-link" href="index.html">
               <i class="typcn typcn-device-desktop menu-icon"></i>
               <span class="menu-title">Dashboard</span>
-              <div class="badge badge-danger">new</div>
+            </a>
+          </li>          
+          <li class="nav-item">
+            <a class="nav-link" href="/merek">
+              <i class="typcn typcn-device-desktop menu-icon"></i>
+              <span class="menu-title">Merek</span>
+            </a>
+          </li>          
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="typcn typcn-device-desktop menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
             </a>
           </li>          
           <li class="nav-item">
