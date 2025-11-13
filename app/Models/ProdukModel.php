@@ -12,7 +12,9 @@ class ProdukModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_merek','nama_produk','harga','stok'];
+
+    
+    protected $allowedFields    = ['id_produk', 'id_merek', 'nama_produk', 'harga', 'stok'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -22,12 +24,26 @@ class ProdukModel extends Model
 
     public function getById($id = null): object
     {
-        $data = $this->db->table($this->table)
+        return $this->db->table($this->table)
             ->select('produk.*, merek.nama_merek')
             ->join('merek', 'merek.id_merek = produk.id_merek', 'left')
             ->where('produk.id_produk', $id)
             ->get()
             ->getRow();
-        return $data;
+    }
+
+    public function getProdukWithMerek(): array
+    {
+        return $this->db->table($this->table)
+            ->select('produk.*, merek.nama_merek')
+            ->join('merek', 'merek.id_merek = produk.id_merek', 'left')
+            ->orderBy('produk.id_produk', 'DESC')
+            ->get()
+            ->getResult();
+    }
+
+    public function updateProduk($id, $data)
+    {
+        return $this->update($id, $data);
     }
 }

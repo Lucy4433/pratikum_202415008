@@ -2,7 +2,6 @@
 <?= $this->section('content') ?>
 <div class="card-header d-flex justify-content-between mb-3">
     <h4>Daftar Merek</h4>
-    <!-- <a href="/merek/tambah" class="btn btn-primary btn-sm">Tambah</a> -->
 </div>
 <div class="row">
     <div class="col-md-4">

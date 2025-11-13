@@ -1,3 +1,5 @@
+<?= $this->extend('layout/index'); ?>
+<?= $this->section('content') ?>
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
@@ -13,11 +15,17 @@
             </a>
           </li>          
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/produk">
               <i class="typcn typcn-device-desktop menu-icon"></i>
-              <span class="menu-title">Dashboard</span>
+              <span class="menu-title">Produk</span>
             </a>
-          </li>          
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/discount">
+              <i class="typcn typcn-device-desktop menu-icon"></i>
+              <span class="menu-title">Discount</span>
+            </a>
+          </li>             
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="typcn typcn-document-text menu-icon"></i>

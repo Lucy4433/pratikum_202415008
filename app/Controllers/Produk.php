@@ -4,45 +4,56 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProdukModel;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\MerekModel;
 
 class Produk extends BaseController
 {
     protected $model;
+    protected $merek;
 
     public function __construct()
     {
         $this->model = new ProdukModel();
+        $this->merek = new MerekModel();
     }
 
     public function index()
     {
-        $data['model'] =  $this->model->findAll();
+        $data['produk'] = $this->model->getProdukWithMerek();
+        $data['merek']  = $this->merek->findAll();
         return view('produk/index', $data);
     }
 
     public function tambah()
     {
         if ($this->request->getMethod() == 'POST') {
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('produk'));
+            $post = $this->request->getPost(['nama_produk', 'id_merek', 'harga', 'stok']);
+            $post['harga'] = preg_replace('/\D/', '', $post['harga']);
+            $this->model->save($post);
+            return redirect()->to(base_url('produk'))->with('success', 'Produk berhasil ditambahkan.');
         }
-        return view('produk/tambah');
+
+        $data['merek'] = $this->merek->findAll();
+        return view('produk/tambah', $data);
     }
 
     public function ubah($id = null)
     {
-        if ($this->request->getMethod() == 'POST') {
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('produk'));
+        if ($this->request->getMethod() === 'POST') {
+            $post = $this->request->getPost(['id_produk', 'id_merek', 'nama_produk', 'harga', 'stok']);
+            $post['harga'] = preg_replace('/\D/', '', $post['harga']);
+            $this->model->update($post['id_produk'], $post);
+            return redirect()->to(base_url('produk'))->with('success', 'Produk berhasil diperbarui.');
         }
-        $data['model'] =  $this->model->where('id_produk', $id)->first();
+
+        $data['produk'] = $this->model->find($id);
+        $data['merek']  = $this->merek->findAll();
         return view('produk/ubah', $data);
     }
 
     public function hapus($id = null)
     {
         $this->model->delete($id);
-        return redirect()->to(base_url('produk'));
+        return redirect()->to(base_url('produk'))->with('success', 'Produk berhasil dihapus.');
     }
 }

@@ -3,7 +3,7 @@
 <div class="row">
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <h4>Tambah Merek</h4>
+            <h4>Tambah Mere</h4>
             <button class="btn btn-secondary btn-sm" onclick="history.back()">Kembali</button>
         </div>
         <div class="card body">

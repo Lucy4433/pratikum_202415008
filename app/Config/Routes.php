@@ -9,6 +9,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Dashboard::index');
 $routes->get('dashbaord','Dashboard::index');
 
+
 $routes->get('/', 'welcome_massage::index');
 
 
@@ -26,11 +27,13 @@ $routes->group('detailpembelian', function($routes){
     $routes->get('hapus/(:any)', 'DetailPembelian::hapus/$1');
 });
 
+$routes->get('discount', 'Discount::index');
 $routes->group('discount', function($routes){
     $routes->get('/', 'Discount::index');
-    $routes->add('tambah', 'Discount::tambah');
-    $routes->add('ubah/(:any)', 'Discount::ubah/$1');
-    $routes->get('hapus/(:any)', 'Discount::hapus/$1');
+    $routes->post('tambah', 'Discount::tambah');
+    $routes->post('ubah/(:num)', 'Discount::ubah/$1');
+    $routes->get('hapus/(:num)', 'Discount::hapus/$1');
+
 });
 
 $routes->group('merek', function($routes){
@@ -63,9 +66,10 @@ $routes->group('pembelian', function($routes){
 
 $routes->group('produk', function($routes){
     $routes->get('/', 'Produk::index');
-    $routes->add('tambah', 'Produk::tambah');
-    $routes->add('ubah/(:any)', 'Produk::ubah/$1');
-    $routes->get('hapus/(:any)', 'Produk::hapus/$1');
+    $routes->get('tambah', 'Produk::tambah');
+    $routes->post('tambah', 'Produk::tambah');
+    $routes->post('ubah/(:num)', 'Produk::ubah/$1'); 
+    $routes->get('hapus/(:num)', 'Produk::hapus/$1');
 });
 
 $routes->group('profiltoko', function($routes){
