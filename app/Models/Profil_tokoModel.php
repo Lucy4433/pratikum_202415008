@@ -19,4 +19,6 @@ class Profil_tokoModel extends Model
 
     protected array $casts = [];
     protected array $castHandlers = [];
+
 }
+

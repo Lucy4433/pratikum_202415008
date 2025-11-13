@@ -7,7 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 $routes->get('/', 'Dashboard::index');
-$routes->get('dashbaord','Dashboard::index');
+$routes->get('dashboard','Dashboard::index');
 
 
 $routes->get('/', 'welcome_massage::index');
@@ -81,9 +81,9 @@ $routes->group('profiltoko', function($routes){
 
 $routes->group('supplier', function($routes){
     $routes->get('/', 'Supplier::index');
-    $routes->add('tambah', 'Supplier::tambah');
-    $routes->add('ubah/(:any)', 'Supplier::ubah/$1');
-    $routes->get('hapus/(:any)', 'Supplier::hapus/$1');
+    $routes->match(['get','post'], 'tambah', 'Supplier::tambah');
+    $routes->match(['get','post'], 'ubah/(:num)', 'Supplier::ubah/$1');
+    $routes->get('hapus/(:num)', 'Supplier::hapus/$1');
 });
 
 $routes->group('user', function($routes){

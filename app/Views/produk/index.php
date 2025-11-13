@@ -1,5 +1,5 @@
 <?= $this->extend('layout/index'); ?>
-<?= $this->section('content') ?>
+<?= $this->section('content'); ?>
 
 <div class="card-header d-flex justify-content-between mb-3">
     <h4>Daftar Produk HP</h4>

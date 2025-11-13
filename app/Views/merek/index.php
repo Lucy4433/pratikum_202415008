@@ -1,5 +1,6 @@
 <?= $this->extend('layout/index'); ?>
-<?= $this->section('content') ?>
+<?= $this->section('content'); ?>
+
 <div class="card-header d-flex justify-content-between mb-3">
     <h4>Daftar Merek</h4>
 </div>
@@ -41,7 +42,7 @@
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLabel-2">Ubah Merek</h5>
                                             </div>
-                                            <form action="/merek/ubah/<?= $value->id_merek ?>" method="post" style="margin: 6px;">
+                                            <form action="/merek/ubah/<?= $value->id_merek ?>" method="post" style="margin: 10px;">
                                                 <div class="modal-body">
                                                     <div class="form-group">
                                                         <label for="">Merek</label>
@@ -50,7 +51,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"> Close</button>
                                                     <button type="submit" class="btn btn-primary btn-sm">Save</button>
                                                 </div>
                                             </form>

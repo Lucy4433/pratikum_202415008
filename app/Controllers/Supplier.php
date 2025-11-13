@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\SupplierModel;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class Supplier extends BaseController
 {
@@ -13,36 +12,43 @@ class Supplier extends BaseController
     public function __construct()
     {
         $this->model = new SupplierModel();
+        helper('form');
     }
 
     public function index()
     {
-        $data['model'] =  $this->model->findAll();
+        $data['model'] = $this->model->findAll();
         return view('supplier/index', $data);
     }
 
     public function tambah()
     {
-        if ($this->request->getMethod() == 'POST') {
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('supplier'));
+        if ($this->request->getMethod() === 'post') {
+            $post = $this->request->getPost(['nama', 'alamat', 'telepon', 'email']);
+            $this->model->insert($post);
+            return redirect()->to(base_url('supplier'))->with('success', 'Suplier berhasil disimpan.');
         }
+
         return view('supplier/tambah');
     }
 
     public function ubah($id = null)
     {
-        if ($this->request->getMethod() == 'POST') {
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('supplier'));
+        if ($this->request->getMethod() === 'post') {
+            $post = $this->request->getPost(['nama', 'alamat', 'telepon', 'email']);
+            $this->model->update($id, $post);
+            return redirect()->to(base_url('supplier'))->with('success', 'Suplier berhasil diperbarui.');
         }
-        $data['model'] =  $this->model->where('id_supplier', $id)->first();
+
+        $data['model'] = $this->model->find($id);
         return view('supplier/ubah', $data);
     }
 
     public function hapus($id = null)
     {
-        $this->model->delete($id);
-        return redirect()->to(base_url('supplier'));
+        if ($id) {
+            $this->model->delete($id);
+        }
+        return redirect()->to(base_url('supplier'))->with('success', 'Suplier berhasil dihapus.');
     }
 }
