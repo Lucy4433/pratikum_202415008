@@ -18,11 +18,12 @@ class Discount extends BaseController
         helper('form');
     }
 
-    public function index()
+    public function index($id = null)
     {
         $data['discount'] = $this->discountModel
             ->select('discount.*, produk.nama_produk')
             ->join('produk', 'produk.id_produk = discount.id_produk', 'left')
+            ->where('discount.id_produk', $id)
             ->orderBy('discount.id_discount', 'DESC')
             ->findAll();
 

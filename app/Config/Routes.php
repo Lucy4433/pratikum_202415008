@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes->get('/', 'Dashboard::index');
 $routes->get('dashboard','Dashboard::index');
+$routes->get('dashboardadmin','Dashboardadmin::index');
 
 
 $routes->get('/', 'welcome_massage::index');
@@ -70,6 +71,7 @@ $routes->group('produk', function($routes){
     $routes->post('tambah', 'Produk::tambah');
     $routes->post('ubah/(:num)', 'Produk::ubah/$1'); 
     $routes->get('hapus/(:num)', 'Produk::hapus/$1');
+    $routes->get('discount/(:num)', 'Discount::index/$1');
 });
 
 $routes->group('profiltoko', function($routes){

@@ -37,6 +37,9 @@
                             <a href="/produk/hapus/<?= esc($p->id_produk) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Hapus produk ini?')">
                                 <i class="fa fa-trash"></i> Hapus
                             </a>
+                            <a href="/produk/discount/<?= esc($p->id_produk) ?>" class="btn btn-info btn-sm">
+                                <i class="fa fa-trash"></i> Discount
+                            </a>
                         </td>
                     </tr>
 

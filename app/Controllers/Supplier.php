@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\SupplierModel;
+use App\Models\SuplierModel;
 
 class Supplier extends BaseController
 {
@@ -11,7 +11,7 @@ class Supplier extends BaseController
 
     public function __construct()
     {
-        $this->model = new SupplierModel();
+        $this->model = new SuplierModel();
         helper('form');
     }
 

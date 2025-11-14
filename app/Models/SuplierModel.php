@@ -13,13 +13,11 @@ class SuplierModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
 
-    // kolom yang sesuai tabel suplier
     protected $allowedFields    = ['nama', 'alamat', 'email', 'telepon'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
-    // Relasi opsional ke pembelian
     public function getSuplierWithPembelian(): array
     {
         return $this->db->table($this->table)
