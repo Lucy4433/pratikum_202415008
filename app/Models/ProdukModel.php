@@ -32,7 +32,7 @@ class ProdukModel extends Model
             ->getRow();
     }
 
-    public function getProdukWithMerek(): array
+    public function getProdukWithMerek()
     {
         return $this->db->table($this->table)
             ->select('produk.*, merek.nama_merek')

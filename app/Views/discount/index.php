@@ -1,6 +1,64 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content') ?>
 
+<!-- Styles tombol bundar -->
+<style>
+.action-group {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tombol bundar */
+.action-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Warna tombol */
+.btn-orange { background: #f6a21a; } /* edit */
+.btn-red    { background: #f14b5d; } /* delete */
+
+/* icon ukuran */
+.action-circle img.icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* responsive */
+@media (max-width:480px){
+    .action-circle { width: 34px; height: 34px; }
+    .action-circle img.icon { width: 16px; height: 16px; }
+}
+
+/* Statistik cards */
+.stat-row { margin-bottom: 1.25rem; }
+.stat-card {
+    border-radius: 6px;
+    color: #fff;
+    padding: 16px;
+    box-shadow: 0 6px 18px rgba(28,39,61,0.06);
+}
+.stat-title { font-size: 0.95rem; opacity: 0.9; }
+.stat-num { font-size: 1.6rem; font-weight: 600; margin-top: 6px; }
+.stat-note { margin-top: 8px; opacity: 0.9; font-size: 0.9rem; }
+.stat-purple { background:#7b42d6; }   /* aktif */
+.stat-orange { background:#f6a21a; }   /* belum aktif */
+.stat-red    { background:#e74c3c; }   /* expired */
+.stat-blue   { background:#2f9bf0; }   /* belum ada diskon */
+@media (max-width:767px){ .stat-num { font-size:1.25rem; } }
+</style>
+
 <div class="card-header d-flex justify-content-between mb-3">
     <h4>Daftar Diskon Produk</h4>
     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahModal">
@@ -9,6 +67,42 @@
 </div>
 
 <div class="card-body">
+
+    <!-- KARTU STATISTIK -->
+    <div class="row stat-row">
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card stat-purple">
+                <div class="stat-num"><?= esc($stats['active'] ?? 0) ?></div>
+                <div class="stat-title">Diskon Aktif</div>
+                <div class="stat-note">Jumlah diskon yang sedang aktif hari ini</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card stat-orange">
+                <div class="stat-num"><?= esc($stats['upcoming'] ?? 0) ?></div>
+                <div class="stat-title">Belum Dimulai</div>
+                <div class="stat-note">Diskon yang belum mulai</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card stat-red">
+                <div class="stat-num"><?= esc($stats['expired'] ?? 0) ?></div>
+                <div class="stat-title">Expired</div>
+                <div class="stat-note">Diskon yang sudah lewat</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card stat-blue">
+                <div class="stat-num"><?= esc($stats['no_discount'] ?? 0) ?></div>
+                <div class="stat-title">Produk Belum Diskon</div>
+                <div class="stat-note">Jumlah produk yang belum memiliki diskon</div>
+            </div>
+        </div>
+    </div>
+    <!-- /KARTU STATISTIK -->
 
     <!-- Notifikasi sukses -->
     <?php if (session()->getFlashdata('success')): ?>
@@ -19,7 +113,7 @@
     <?php endif; ?>
 
     <!-- Notifikasi error -->
-    <?php if (session()->getFlashdata('errors')): 
+    <?php if (session()->getFlashdata('errors')):
         $errors = session()->getFlashdata('errors'); ?>
         <div class="alert alert-danger">
             <ul class="mb-0">
@@ -38,6 +132,7 @@
                 <th>Besaran (%)</th>
                 <th>Mulai</th>
                 <th>Selesai</th>
+                <th>Status</th>
                 <th width="18%">Aksi</th>
             </tr>
         </thead>
@@ -50,15 +145,29 @@
                         <td class="text-center"><?= esc($d->besaran) ?>%</td>
                         <td class="text-center"><?= esc($d->dari_date) ?></td>
                         <td class="text-center"><?= esc($d->sampai_date) ?></td>
+                        <td class="text-center"><?= esc($d->status ?? '-') ?></td>
                         <td class="text-center">
-                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-<?= esc($d->id_discount) ?>">
-                                <i class="fa fa-pencil"></i> Edit
-                            </button>
-                            <a href="<?= base_url('discount/hapus/' . esc($d->id_discount)) ?>"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('Yakin ingin menghapus diskon ini?')">
-                                <i class="fa fa-trash"></i> Hapus
-                            </a>
+                            <div class="action-group">
+
+                                <!-- Edit (oranye) - buka modal edit -->
+                                <button type="button"
+                                        class="action-circle btn-orange"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal-<?= esc($d->id_discount) ?>"
+                                        title="Edit Diskon">
+                                    <img src="https://img.icons8.com/ios-filled/50/edit--v1.png" class="icon" alt="edit">
+                                </button>
+
+                                <!-- Hapus (merah) - form POST dengan CSRF -->
+                                <form method="post" action="<?= base_url('discount/hapus') ?>" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus diskon ini?')">
+                                    <?= csrf_field() ?>
+                                    <input type="hidden" name="id" value="<?= esc($d->id_discount) ?>">
+                                    <button type="submit" class="action-circle btn-red" title="Hapus Diskon">
+                                        <img src="https://img.icons8.com/fluency/20/delete-trash.png" class="icon" alt="hapus">
+                                    </button>
+                                </form>
+
+                            </div>
                         </td>
                     </tr>
 
@@ -142,7 +251,7 @@
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="6" class="text-center">Belum ada data diskon.</td>
+                    <td colspan="7" class="text-center">Belum ada data diskon.</td>
                 </tr>
             <?php endif; ?>
         </tbody>
@@ -153,7 +262,7 @@
 <div class="modal fade" id="tambahModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
-            
+
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Diskon Produk</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -177,7 +286,7 @@
                         <label class="form-label">Besaran Diskon (%)</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">%</span>
-                            <input type="number" name="besaran" class="form-control form-control-sm" min="1" max="100" required>
+                            <input type="number" name="besaran" class="form-control form-control-sm" min="0" max="100" required>
                         </div>
                     </div>
 
@@ -205,6 +314,5 @@
         </div>
     </div>
 </div>
-
 
 <?= $this->endSection() ?>

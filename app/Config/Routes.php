@@ -33,8 +33,7 @@ $routes->group('discount', function($routes){
     $routes->get('/', 'Discount::index');
     $routes->post('tambah', 'Discount::tambah');
     $routes->post('ubah/(:num)', 'Discount::ubah/$1');
-    $routes->get('hapus/(:num)', 'Discount::hapus/$1');
-
+    $routes->post('hapus/(:num)', 'Discount::hapus/$1');
 });
 
 $routes->group('merek', function($routes){
@@ -83,9 +82,9 @@ $routes->group('profiltoko', function($routes){
 
 $routes->group('supplier', function($routes){
     $routes->get('/', 'Supplier::index');
-    $routes->match(['get','post'], 'tambah', 'Supplier::tambah');
-    $routes->match(['get','post'], 'ubah/(:num)', 'Supplier::ubah/$1');
-    $routes->get('hapus/(:num)', 'Supplier::hapus/$1');
+    $routes->post('tambah', 'Supplier::tambah');
+    $routes->post('ubah/(:num)', 'Supplier::ubah/$1');
+    $routes->post('hapus', 'Supplier::hapus');
 });
 
 $routes->group('user', function($routes){

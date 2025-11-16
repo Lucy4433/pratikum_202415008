@@ -3,24 +3,32 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\ProdukModel;
+use App\Models\DiscountModel;
 use App\Models\MerekModel;
+use App\Models\ProdukModel;
 
 class Produk extends BaseController
 {
     protected $model;
+    protected $discount;
     protected $merek;
 
     public function __construct()
     {
         $this->model = new ProdukModel();
+        $this->discount = new DiscountModel();
         $this->merek = new MerekModel();
     }
 
     public function index()
     {
         $data['produk'] = $this->model->getProdukWithMerek();
-        $data['merek']  = $this->merek->findAll();
+        $data['merek'] = $this->merek->findAll();
+        foreach ($data['produk'] as $key => $value) {
+            $value->discount = $this->discount->getByProductId($value->id_produk);
+        }
+        // dd($data['produk']);
+        
         return view('produk/index', $data);
     }
 

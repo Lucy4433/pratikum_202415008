@@ -55,6 +55,7 @@
                 <th>Merek</th>
                 <th>Harga</th>
                 <th width="8%">Stok</th>
+                <th width="8%">Discount</th>
                 <th width="18%">Aksi</th>
             </tr>
         </thead>
@@ -66,10 +67,11 @@
                         <td><?= esc($p->nama_produk) ?></td>
                         <td><?= esc($p->nama_merek ?? '-') ?></td>
                         <td>Rp <?= number_format($p->harga ?? 0, 0, ',', '.') ?></td>
-
+                        
                         <td class="text-center">
                             <?= is_numeric($p->stok) ? esc($p->stok) : '0' ?>
                         </td>
+                        <td><?= is_null($p->discount) ? 'Tidak ada Discount' : $p->discount->besaran.'%' ?></td>
 
                         <td class="text-center">
                             <div class="action-group">
