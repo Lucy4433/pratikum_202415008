@@ -1,6 +1,5 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content') ?>
-
                         <div class="row gx-5">
                             <div class="col-xxl-3 col-md-6 mb-5">
                                 <div class="card card-raised bg-primary text-white">
