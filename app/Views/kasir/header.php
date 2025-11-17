@@ -1,9 +1,3 @@
-<?php
-// ambil data profil toko (baris pertama saja)
-$profilModel = new \App\Models\ProfilTokoModel();
-$profil      = $profilModel->first();
-?>
-
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row"
      style="background-color:#212842 !important;">
   
@@ -41,28 +35,18 @@ $profil      = $profilModel->first();
 
     <ul class="navbar-nav me-lg-2">
 
-      <!-- DROPDOWN PROFIL / PROFIL TOKO -->
       <li class="nav-item nav-profile dropdown">
         <a class="nav-link" href="#" data-bs-toggle="dropdown" id="profileDropdown" style="color:white !important;">
-          <img src="<?= base_url('assets/images/faces/face5.jpg') ?>" alt="profile"/>
-          <!-- tampilkan nama toko jika ada, kalau tidak pakai default "SHOP STORE" -->
-          <span class="nav-profile-name" style="color:white !important;">
-            <?= esc($profil->nama_toko ?? 'SHOP STORE') ?>
-          </span>
+          <img src="<?= base_url('assets/images/Logo_kecil.png') ?>" alt="profile"/>
+          <span class="nav-profile-name" style="color:white !important;">PHONE STORE</span>
         </a>
 
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-          <!-- PROFIL TOKO → BUKA MODAL -->
-          <a class="dropdown-item"
-             href="#"
-             data-bs-toggle="modal"
-             data-bs-target="#modalProfilToko">
+          <a class="dropdown-item">
             <i class="typcn typcn-cog-outline text-primary"></i>
-            Profil Toko
+            Settings
           </a>
-
-          <!-- LOGOUT -->
-          <a class="dropdown-item" href="<?= base_url('logout') ?>">
+          <a class="dropdown-item">
             <i class="typcn typcn-eject text-primary"></i>
             Logout
           </a>
@@ -73,7 +57,7 @@ $profil      = $profilModel->first();
         <p class="mb-0" style="color:white !important;">Last login was 23 hours ago.</p>
       </li>
 
-    </ul>
+    </ul>
 
     <!-- BAGIAN NAV KANAN -->
     <ul class="navbar-nav navbar-nav-right">
@@ -124,58 +108,3 @@ $profil      = $profilModel->first();
 
   </div>
 </nav>
-
-<!-- =============== MODAL PROFIL TOKO ================= -->
-<div class="modal fade" id="modalProfilToko" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-md modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title">Profil Toko</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <form action="<?= base_url('profiltoko/simpan') ?>" method="post">
-        <?= csrf_field() ?>
-
-        <div class="modal-body">
-          <!-- id_profil (hidden) kalau sudah ada di database -->
-          <input type="hidden" name="id_profil" value="<?= esc($profil->id_profil ?? '') ?>">
-
-          <div class="mb-3">
-            <label class="form-label">Nama Toko</label>
-            <input type="text"
-                   name="nama_toko"
-                   class="form-control form-control-sm"
-                   value="<?= esc($profil->nama_toko ?? '') ?>"
-                   required>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Alamat</label>
-            <textarea name="alamat"
-                      class="form-control form-control-sm"
-                      rows="3"
-                      required><?= esc($profil->alamat ?? '') ?></textarea>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">No. Telepon</label>
-            <input type="text"
-                   name="no_telp"
-                   class="form-control form-control-sm"
-                   value="<?= esc($profil->no_telp ?? '') ?>">
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-success btn-sm">Simpan</button>
-        </div>
-
-      </form>
-
-    </div>
-  </div>
-</div>
-<!-- ============= END MODAL PROFIL TOKO ============== -->

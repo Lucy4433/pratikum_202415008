@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <h4>Tambah Mere</h4>
-            <button class="btn btn-secondary btn-sm" onclick="history.back()">Kembali</button>
+            <button class="btn btn-secondary btn-sm" onclick="history.back()">Kemba</button>
         </div>
         <div class="card body">
            

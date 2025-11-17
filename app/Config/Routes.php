@@ -5,14 +5,17 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-
+$routes->get('/', 'Login::index');
+$routes->get('Login','Login::index');
+//login
+$routes->get('login', 'Login::index');
+$routes->post('login/proses', 'Login::proses');
+//logout
+$routes->get('logout', 'Login::logout');
 $routes->get('/', 'Dashboard::index');
 $routes->get('dashboard','Dashboard::index');
-$routes->get('dashboardadmin','Dashboardadmin::index');
-
-
-$routes->get('/', 'welcome_massage::index');
-
+$routes->get('/', 'Kasir::index');
+$routes->get('kasir','Kasir::index');
 
 $routes->group('detailOrder', function($routes){
     $routes->get('/', 'DetailOrder::index');
@@ -75,9 +78,7 @@ $routes->group('produk', function($routes){
 
 $routes->group('profiltoko', function($routes){
     $routes->get('/', 'ProfilToko::index');
-    $routes->add('tambah', 'ProfilToko::tambah');
-    $routes->add('ubah/(:any)', 'ProfilToko::ubah/$1');
-    $routes->get('hapus/(:any)', 'ProfilToko::hapus/$1');
+    $routes->post('profiltoko/simpan', 'ProfilToko::simpan');
 });
 
 $routes->group('supplier', function($routes){

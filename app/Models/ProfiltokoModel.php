@@ -1,24 +1,21 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProfiltokoModel extends Model
+class ProfilTokoModel extends Model
 {
     protected $table            = 'profil_toko';
-    protected $primaryKey       = 'id_profil_toko';
+    protected $primaryKey       = 'id_profil';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_profil', 'nama_toko', 'alamat', 'no_telp'];
+
+    protected $allowedFields    = ['nama_toko', 'alamat', 'no_telp', 'foto'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
-    protected array $casts = [];
-    protected array $castHandlers = [];
-
 }
-

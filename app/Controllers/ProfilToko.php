@@ -3,48 +3,40 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Model\ProfiltokoModel;
-use App\Models\Profil_tokoModel;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\ProfilTokoModel;
 
 class ProfilToko extends BaseController
 {
-    protected $model;
+    protected $profilModel;
 
     public function __construct()
     {
-        $this->model = new ProfiltokoModel();
+        $this->profilModel = new ProfilTokoModel();
+        helper('form');
     }
 
-    public function index()
+    public function simpan()
     {
-        $data['model'] =  $this->model->findAll();
-        return view('profil_toko/index', $data);
-    }
-
-    public function tambah()
-    {
-        if ($this->request->getMethod() == 'POST') {
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('profil_toko'));
+        if ($this->request->getMethod() !== 'POST') {
+            return redirect()->back();
         }
-        return view('profil_toko/tambah');
-    }
 
-    public function ubah($id = null)
-    {
-        if ($this->request->getMethod() == 'POST') {
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('profil_toko'));
+        $id = $this->request->getPost('id_profil');
+
+        $data = [
+            'nama_toko' => $this->request->getPost('nama_toko'),
+            'alamat'    => $this->request->getPost('alamat'),
+            'no_telp'   => $this->request->getPost('no_telp'),
+        ];
+
+        if ($id) {
+            // update baris yang sudah ada
+            $this->profilModel->update($id, $data);
+        } else {
+            // kalau belum ada, insert baru
+            $this->profilModel->insert($data);
         }
-        $data['model'] =  $this->model->where('id_profil_toko', $id)->first();
-        return view('profil_toko/ubah', $data);
-    }
 
-    public function hapus($id = null)
-    {
-        $this->model->delete($id);
-        return redirect()->to(base_url('profil_toko'));
+        return redirect()->back()->with('success', 'Profil toko berhasil disimpan.');
     }
 }
-
