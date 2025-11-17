@@ -20,12 +20,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                           </div>
                             <div class="col-xxl-3 col-md-6 mb-5">
                                 <div class="card card-raised bg-warning text-white">
                                     <div class="card-body px-4">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div class="me-2">
+                                            <div class= "me-2">
                                                 <div class="display-5 text-white">12.2K</div>
                                                 <div class="card-text">Purchases</div>
                                             </div>

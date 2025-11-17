@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Model\ProfiltokoModel;
 use App\Models\Profil_tokoModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -12,7 +13,7 @@ class ProfilToko extends BaseController
 
     public function __construct()
     {
-        $this->model = new Profil_tokoModel();
+        $this->model = new ProfiltokoModel();
     }
 
     public function index()
