@@ -7,15 +7,16 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Login::index');
 $routes->get('Login','Login::index');
-//login
 $routes->get('login', 'Login::index');
 $routes->post('login/proses', 'Login::proses');
-//logout
 $routes->get('logout', 'Login::logout');
+
 $routes->get('/', 'Dashboard::index');
 $routes->get('dashboard','Dashboard::index');
+
 $routes->get('/', 'Kasir::index');
 $routes->get('kasir','Kasir::index');
+$routes->get('transaksi', 'Kasir::transaksi');
 
 $routes->group('detailOrder', function($routes){
     $routes->get('/', 'DetailOrder::index');

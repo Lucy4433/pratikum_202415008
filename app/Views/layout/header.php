@@ -1,9 +1,3 @@
-<?php
-// ambil data profil toko (baris pertama saja)
-$profilModel = new \App\Models\ProfilTokoModel();
-$profil      = $profilModel->first();
-?>
-
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row"
      style="background-color:#212842 !important;">
   

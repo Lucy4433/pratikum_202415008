@@ -1,9 +1,8 @@
-
-<nav class="sidebar sidebar-offcanvas" id="sidebar">
+nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
 
         <li class="nav-item">
-            <a class="nav-link" href="/dashboardadmin">
+            <a class="nav-link" href="/dashboard">
                 <i class="typcn typcn-home menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
@@ -37,12 +36,6 @@
             </a>
         </li>
 
-         <li class="nav-item">
-            <a class="nav-link" href="/supplier">
-                <i class="typcn typcn-briefcase menu-icon"></i>
-                <span class="menu-title">Supplier</span>
-            </a>
-        </li>
 
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false">
@@ -68,5 +61,5 @@
 
     </ul>
 </nav>
-
+<?= $this->endSection(); ?>
 
