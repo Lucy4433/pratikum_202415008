@@ -1,3 +1,9 @@
+<?php
+// ambil data profil toko (baris pertama saja)
+$profilModel = new \App\Models\ProfilTokoModel();
+$profil      = $profilModel->first();
+?>
+
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row"
      style="background-color:#212842 !important;">
   
@@ -11,14 +17,14 @@
       <a class="navbar-brand brand-logo" href="<?= base_url('/') ?>">
         <img src="<?= base_url('assets/images/Logo_hp.png') ?>" 
              alt="logo" 
-             style="height:120px; object-fit:contain;">
+             style="height:95px; object-fit:contain;">
       </a>
 
       <!-- LOGO MINI -->
       <a class="navbar-brand brand-logo-mini" href="<?= base_url('/') ?>">
         <img src="<?= base_url('assets/images/Logo_kecil.png') ?>" 
              alt="logo-mini" 
-             style="height:60px; object-fit:contain;">
+             style="height:50px; object-fit:contain;">
       </a>
 
       <!-- TOMBOL MENU -->
@@ -31,19 +37,14 @@
 
   <!-- BAGIAN KANAN NAVBAR -->
   <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
-       style="background-color:#212842 !important; color:white !important;">
+       style="background-color:#212842 !important; color:white !important; gap:18px;">
 
-    <ul class="navbar-nav me-lg-2">
-
-      <!-- DROPDOWN PROFIL / PROFIL TOKO -->
+    <!-- === PROFIL TOKO (FOTO + NAMA) === -->
+    <ul class="navbar-nav d-flex align-items-center m-0">
       <li class="nav-item nav-profile dropdown">
-        <a class="nav-link" href="#" data-bs-toggle="dropdown" id="profileDropdown" style="color:white !important;">
-          <img src="<?= base_url('assets/images/faces/face5.jpg') ?>" alt="profile"/>
-          <!-- tampilkan nama toko jika ada, kalau tidak pakai default "SHOP STORE" -->
-          <span class="nav-profile-name" style="color:white !important;">
-            <?= esc($profil->nama_toko ?? 'SHOP STORE') ?>
-          </span>
-        </a>
+        <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="dropdown" id="profileDropdown" style="color:white !important;">
+          <img src="<?= base_url('assets/images/faces/face5.jpg') ?>" alt="profile"
+               style="width:40px; height:40px; border-radius:50%; object-fit:cover; margin-right:8px;"/>
 
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
           <!-- PROFIL TOKO → BUKA MODAL -->
@@ -62,21 +63,16 @@
           </a>
         </div>
       </li>
-
-      <li class="nav-item nav-user-status dropdown">
-        <p class="mb-0" style="color:white !important;">Last login was 23 hours ago.</p>
-      </li>
-
     </ul>
 
-    <!-- BAGIAN NAV KANAN -->
-    <ul class="navbar-nav navbar-nav-right">
+    <!-- === BAGIAN NAV KANAN (TANGGAL, MAIL, BELL) === -->
+    <ul class="navbar-nav navbar-nav-right d-flex align-items-center m-0">
 
       <!-- TANGGAL -->
       <li class="nav-item nav-date dropdown">
         <a class="nav-link d-flex justify-content-center align-items-center" href="javascript:;" style="color:white !important;">
           <h6 class="date mb-0" style="color:white !important;">Today : Mar 23</h6>
-          <i class="typcn typcn-calendar" style="color:white !important;"></i>
+          <i class="typcn typcn-calendar ms-2" style="color:white !important;"></i>
         </a>
       </li>
 
@@ -133,7 +129,7 @@
         <?= csrf_field() ?>
 
         <div class="modal-body">
-          <!-- id_profil (hidden) kalau sudah ada di database -->
+          <!-- id_profil (hidden) database -->
           <input type="hidden" name="id_profil" value="<?= esc($profil->id_profil ?? '') ?>">
 
           <div class="mb-3">

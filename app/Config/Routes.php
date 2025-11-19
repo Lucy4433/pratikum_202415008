@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Login::index');
+// $routes->get('/', 'Login::index');
 $routes->get('Login','Login::index');
 $routes->get('login', 'Login::index');
 $routes->post('login/proses', 'Login::proses');
@@ -14,9 +14,10 @@ $routes->get('logout', 'Login::logout');
 $routes->get('/', 'Dashboard::index');
 $routes->get('dashboard','Dashboard::index');
 
-$routes->get('/', 'Kasir::index');
+// $routes->get('/', 'Kasir::index');
 $routes->get('kasir','Kasir::index');
 $routes->get('transaksi', 'Kasir::transaksi');
+
 
 $routes->group('detailOrder', function($routes){
     $routes->get('/', 'DetailOrder::index');
@@ -32,8 +33,8 @@ $routes->group('detailpembelian', function($routes){
     $routes->get('hapus/(:any)', 'DetailPembelian::hapus/$1');
 });
 
-$routes->get('discount', 'Discount::index');
 $routes->group('discount', function($routes){
+    $routes->get('discount', 'Discount::index');
     $routes->get('/', 'Discount::index');
     $routes->post('tambah', 'Discount::tambah');
     $routes->post('ubah/(:num)', 'Discount::ubah/$1');
@@ -79,7 +80,7 @@ $routes->group('produk', function($routes){
 
 $routes->group('profiltoko', function($routes){
     $routes->get('/', 'ProfilToko::index');
-    $routes->post('profiltoko/simpan', 'ProfilToko::simpan');
+    $routes->post('simpan', 'ProfilToko::simpan');
 });
 
 $routes->group('supplier', function($routes){
@@ -95,10 +96,3 @@ $routes->group('user', function($routes){
     $routes->add('ubah/(:any)', 'User::ubah/$1');
     $routes->get('hapus/(:any)', 'User::hapus/$1');
 });
-
-
-
-
-
-
-

@@ -33,7 +33,7 @@
   <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
        style="background-color:#212842 !important; color:white !important;">
 
-    <ul class="navbar-nav me-lg-2">
+    <ul class="navbar-nav me-lg-10">
 
       <li class="nav-item nav-profile dropdown">
         <a class="nav-link" href="#" data-bs-toggle="dropdown" id="profileDropdown" style="color:white !important;">

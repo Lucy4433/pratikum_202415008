@@ -24,7 +24,7 @@
     <!-- partial:partials/_navbar.html -->
     <?= view('layout/header');?>
     <!-- partial -->
-    <div class="container-fluid page-body-wrapper">      
+    <div class="container-fluid page-body-wrapper" style="margin-top:90px;">              
       <!-- partial:partials/_sidebar.html -->
       
       <?= view('layout/menu');?>
