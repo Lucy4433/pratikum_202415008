@@ -5,19 +5,28 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-// $routes->get('/', 'Login::index');
-$routes->get('Login','Login::index');
-$routes->get('login', 'Login::index');
-$routes->post('login/proses', 'Login::proses');
-$routes->get('logout', 'Login::logout');
 
-$routes->get('/', 'Dashboard::index');
-$routes->get('dashboard','Dashboard::index');
+    $routes->get('Login','Login::index');
+    $routes->get('login', 'Login::index');
+    $routes->post('login/proses', 'Login::proses');
+    $routes->get('logout', 'Login::logout');
 
-// $routes->get('/', 'Kasir::index');
-$routes->get('kasir','Kasir::index');
-$routes->get('transaksi', 'Kasir::transaksi');
+    $routes->get('/', 'Dashboard::index');
+    $routes->get('dashboard','Dashboard::index');
 
+    $routes->get('kasir/produk', 'ProdukKasir::index');
+
+
+$routes->group('kasir', function($routes){
+    $routes->get('/','Kasir::index');
+    $routes->get('transaksi', 'Kasir::transaksi');
+    $routes->post('simpan', 'Kasir::simpan');
+});
+
+$routes->group('RiwayatTransaksi', function($routes){
+    $routes->get('/', 'RiwayatTransaksi::index');
+    $routes->get('riwayattransaksi/detail/(:num)', 'RiwayatTransaksi::detail/$1');
+});
 
 $routes->group('detailOrder', function($routes){
     $routes->get('/', 'DetailOrder::index');

@@ -14,11 +14,11 @@ class Kasir extends BaseController
         ];
         $data['transaksi_terbaru'] = [];
 
-        return view('kasir/index', $data);
+        return view('transaksi/index', $data);
     }
 
     public function transaksi()
     {
-        return view('kasir/transaksi');
+        return view('transaksi/index');
     }
 }

@@ -12,13 +12,17 @@ class PembayaranModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_pembayaran', 'id_order', 'total', 'tanggal_bayar', 'metode_pembayaran'];
+
+    protected $allowedFields    = [
+        'id_order',
+        'total',
+        'tanggal_bayar',
+        'metode_pembayaran',
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
-    protected array $casts = [];
+    protected array $casts        = [];
     protected array $castHandlers = [];
-
-
 }

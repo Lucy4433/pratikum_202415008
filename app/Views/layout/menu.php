@@ -38,12 +38,34 @@
 
         <?php endif; ?>
         <?php if (session()->get('role') == 'kasir'): ?>
-             <li class="nav-item">
-                <a class="nav-link" href="/discount">
+            <li class="nav-item">
+                <a class="nav-link" href="/kasir">
                     <i class="typcn typcn-ticket menu-icon"></i>
-                    <span class="menu-title">Transaksi</span>
+                    <span class="menu-title">Kasir</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/RiwayatTransaksi">
+                    <i class="typcn typcn-ticket menu-icon"></i>
+                    <span class="menu-title">Riwayat Transaksi</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/RiwayatTransaksi">
+                    <i class="typcn typcn-ticket menu-icon"></i>
+                    <span class="menu-title">Laporan</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/kasir/produk">
+                    <i class="typcn typcn-ticket menu-icon"></i>
+                    <span class="menu-title">Produk</span>
+                </a>
+            </li>
+
         <?php endif; ?>
     </ul>
 </nav>

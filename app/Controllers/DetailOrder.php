@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Detail_orderModel;
+use App\Models\DetailOrderModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Detail_order extends BaseController
@@ -12,7 +12,7 @@ class Detail_order extends BaseController
 
     public function __construct()
     {
-        $this->model = new Detail_orderModel();
+        $this->model = new DetailOrderModel();
     }
 
     public function index()
