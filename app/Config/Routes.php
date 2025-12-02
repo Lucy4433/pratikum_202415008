@@ -14,13 +14,51 @@ use CodeIgniter\Router\RouteCollection;
     $routes->get('/', 'Dashboard::index');
     $routes->get('dashboard','Dashboard::index');
 
-    $routes->get('kasir/produk', 'ProdukKasir::index');
-
+$routes->group('ProdukKasir', function($routes){
+    $routes->get('/', 'ProdukKasir::index');
+});
 
 $routes->group('kasir', function($routes){
     $routes->get('/','Kasir::index');
     $routes->get('transaksi', 'Kasir::transaksi');
+    $routes->post('bayar', 'Kasir::bayar');
     $routes->post('simpan', 'Kasir::simpan');
+    $routes->get('kasir/nota/(:num)', 'Kasir::nota/$1');
+
+});
+
+$routes->group('UserAdmin', function($routes){
+    $routes->get('/', 'UserAdmin::index');
+    $routes->post('updateProfil', 'UserAdmin::updateProfil');
+});
+
+$routes->group('KelolaUser', function($routes){
+    $routes->get('/', 'KelolaUser::index');
+    $routes->post('tambah', 'KelolaUser::tambahKasir');
+    $routes->post('ubah/(:num)', 'KelolaUser::ubahKasir/$1');
+    $routes->get('nonaktif/(:num)', 'KelolaUser::nonaktifKasir/$1');
+    $routes->get('aktif/(:num)', 'KelolaUser::aktifKasir/$1');
+    $routes->get('hapus/(:num)', 'KelolaUser::hapusKasir/$1');
+});
+
+$routes->group('kasir', function($routes){
+    $routes->post('tambah', 'KasirController::tambah');
+    $routes->post('ubah/(:num)', 'KasirController::ubah/$1');
+    $routes->get('hapus/(:num)', 'KasirController::hapus/$1');
+    $routes->get('aktif/(:num)', 'KasirController::aktif/$1');
+    $routes->get('nonaktif/(:num)', 'KasirController::nonaktif/$1');
+});
+
+$routes->group('LaporanAdmin', function($routes){
+    $routes->get('/', 'LaporanAdmin::index');
+    $routes->get('pdf', 'LaporanAdmin::pdf');
+    $routes->get('detail/(:num)', 'LaporanAdmin::detail/$1'); 
+});
+
+$routes->group('LaporanKasir', function($routes){
+    $routes->get('/', 'LaporanKasir::index');
+    $routes->get('pdf', 'LaporanKasir::pdf');
+    $routes->get('detail/(:num)', 'LaporanKasir::detail/$1'); 
 });
 
 $routes->group('RiwayatTransaksi', function($routes){
@@ -47,7 +85,7 @@ $routes->group('discount', function($routes){
     $routes->get('/', 'Discount::index');
     $routes->post('tambah', 'Discount::tambah');
     $routes->post('ubah/(:num)', 'Discount::ubah/$1');
-    $routes->post('hapus/(:num)', 'Discount::hapus/$1');
+    $routes->post('hapus', 'Discount::hapus');
 });
 
 $routes->group('merek', function($routes){

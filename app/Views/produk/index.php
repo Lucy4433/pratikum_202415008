@@ -83,19 +83,17 @@
                                     🖊️
                                 </button>
 
-                                <!-- Tombol Hapus (bulat) -->
+                                <!-- Tombol Hapus -->
                                 <a href="/produk/hapus/<?= esc($p->id_produk) ?>"
                                    class="btn btn-danger action-circle"
                                    onclick="return confirm('Hapus produk ini?')">
-                                    <img src="https://img.icons8.com/fluency/20/delete-trash.png"
-                                         class="icon" alt="hapus">
+                                    🗑️
                                 </a>
 
-                                <!-- Tombol Discount (bulat) -->
+                               <!-- Tombol Discount -->
                                 <a href="/produk/discount/<?= esc($p->id_produk) ?>"
                                    class="btn btn-info action-circle text-white">
-                                    <img src="https://img.icons8.com/color/20/discount--v1.png"
-                                         class="icon" alt="discount">
+                                    🏷️
                                 </a>
 
                             </div>

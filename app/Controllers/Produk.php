@@ -27,8 +27,7 @@ class Produk extends BaseController
         foreach ($data['produk'] as $key => $value) {
             $value->discount = $this->discount->getByProductId($value->id_produk);
         }
-        // dd($data['produk']);
-        
+        // dd($data);
         return view('produk/index', $data);
     }
 

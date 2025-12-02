@@ -20,7 +20,7 @@
                 <th>Merek</th>
                 <th>Harga</th>
                 <th width="8%">Stok</th>
-                <th width="12%">Diskon Aktif</th>
+                <th width="12%">Diskon</th>
             </tr>
         </thead>
         <tbody>

@@ -16,7 +16,7 @@ $qFilter       = $q       ?? $req->getGet('q');
     <div class="card-body">
 
         <!-- =================== FORM PENCARIAN =================== -->
-        <form class="row g-3 mb-3" method="get" action="<?= base_url('riwayattransaksi'); ?>">
+        <form class="row g-3 mb-3" method="get" action="<?= base_url('RiwayatTransaksi'); ?>">
             <div class="col-md-3">
                 <label class="form-label mb-1">Tanggal</label>
                 <input type="date"
@@ -36,7 +36,7 @@ $qFilter       = $q       ?? $req->getGet('q');
                 <button type="submit" class="btn btn-primary btn-sm me-2">
                     <i class="typcn typcn-zoom-outline"></i> Cari
                 </button>
-                <a href="<?= base_url('riwayattransaksi'); ?>" class="btn btn-outline-secondary btn-sm">
+                <a href="<?= base_url('RiwayatTransaksi'); ?>" class="btn btn-outline-secondary btn-sm">
                     Reset
                 </a>
             </div>
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const idOrder = this.getAttribute('data-id');
             if (!idOrder) return;
 
-            // kosongkan dulu isi modal
+            // kosongkan isi modal
             noTransEl.textContent  = '-';
             tglJamEl.textContent   = '-';
             kasirEl.textContent    = '-';
@@ -210,9 +210,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<tr><td colspan="5" class="text-center">Memuat data...</td></tr>';
 
             // panggil endpoint detail (AJAX)
-            fetch('<?= site_url('riwayattransaksi/detail'); ?>/' + idOrder, {
+            fetch('<?= base_url('RiwayatTransaksi/riwayattransaksi/detail'); ?>/' + idOrder, {
                 headers: {
-                    // supaya $this->request->isAJAX() = true kalau kamu pakai di controller
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
@@ -225,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     noTransEl.textContent = h.no_penjualan || '-';
 
                     if (h.tanggal_order) {
-                        // tampilkan apa adanya saja (format dari PHP)
+                        // tampil (format dari PHP)
                         tglJamEl.textContent = h.tanggal_order;
                     } else {
                         tglJamEl.textContent = '-';
@@ -239,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // hitung subtotal
                     let subtotal    = 0;
-                    let totalDiskon = 0; // kalau nanti ada diskon per item, bisa dihitung di sini
+                    let totalDiskon = 0; // kalau nanti ada diskon per item
 
                     bodyItemsEl.innerHTML = '';
 
