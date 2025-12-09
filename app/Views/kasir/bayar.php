@@ -2,11 +2,11 @@
 <?= $this->section('content'); ?>
 
 <?php
-$items        = $items        ?? [];
-$itemsJson    = $items_json   ?? json_encode([]);
-$subtotal     = $subtotal     ?? 0;
-$totalDiskon  = $total_diskon ?? 0;
-$total        = $total        ?? 0;
+$items       = $items        ?? [];
+$itemsJson   = $items_json   ?? json_encode([]);
+$subtotal    = $subtotal     ?? 0;
+$totalDiskon = $total_diskon ?? 0;
+$total       = $total        ?? 0;
 
 $session   = session();
 $namaKasir = $session->get('username') ?? 'Kasir';
@@ -27,9 +27,6 @@ $tanggal   = date('d-m-Y');
             <div class="col-md-4">
                 <strong>Tanggal :</strong> <?= esc($tanggal); ?>
             </div>
-            <div class="col-md-4 text-md-end text-muted">
-                <small>Pastikan nominal bayar dan kembalian sudah benar.</small>
-            </div>
         </div>
 
         <!-- RINGKASAN ITEM -->
@@ -42,19 +39,19 @@ $tanggal   = date('d-m-Y');
                         <th>Nama Produk</th>
                         <th style="width:10%;">Qty</th>
                         <th style="width:18%;">Harga</th>
-                        <th style="width:12%;">Diskon (%)</th>   <!-- ✅ kolom diskon -->
-                        <th style="width:20%;">Subtotal</th>     <!-- subtotal setelah diskon -->
+                        <th style="width:12%;">Diskon (%)</th>
+                        <th style="width:20%;">Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (!empty($items)): ?>
-                        <?php foreach ($items as $i => $it): 
+                        <?php foreach ($items as $i => $it):
                             $qty    = (int)($it['qty']    ?? 0);
                             $harga  = (float)($it['harga'] ?? 0);
-                            $diskon = (float)($it['diskon'] ?? 0);  // ✅ ambil diskon dari item
+                            $diskon = (float)($it['diskon'] ?? 0);
                             $bruto  = $qty * $harga;
                             $potong = $bruto * ($diskon / 100);
-                            $sub    = $bruto - $potong;            // ✅ subtotal setelah diskon
+                            $sub    = $bruto - $potong;
                             $nama   = $it['nama'] ?? 'Produk manual';
                         ?>
                         <tr>
@@ -72,12 +69,6 @@ $tanggal   = date('d-m-Y');
                             </td>
                         </tr>
                         <?php endforeach; ?>
-                        <tr>
-                            <td colspan="5" class="text-end fw-bold">TOTAL BAYAR</td>
-                            <td class="text-end fw-bold text-success">
-                                Rp <?= number_format($total, 0, ',', '.'); ?>
-                            </td>
-                        </tr>
                     <?php else: ?>
                         <tr>
                             <td colspan="6" class="text-center text-muted">
@@ -91,6 +82,7 @@ $tanggal   = date('d-m-Y');
 
         <!-- RINGKASAN TRANSAKSI & PEMBAYARAN -->
         <div class="row">
+            <!-- KIRI: RINGKASAN & INPUT BAYAR -->
             <div class="col-md-6 mb-3 mb-md-0">
                 <h5 class="mb-3">Ringkasan Transaksi & Pembayaran</h5>
 
@@ -149,38 +141,50 @@ $tanggal   = date('d-m-Y');
                 </div>
             </div>
 
-            <!-- AKSI (TENGAH & TOMBOL LEBAR) -->
+            <!-- KANAN: AKSI -->
             <div class="col-md-6 d-flex align-items-center">
                 <div class="w-100">
                     <div class="text-center mb-2">
                         <strong>Aksi</strong>
                     </div>
                     <div class="d-flex flex-column gap-2 align-items-center">
+
+                        <!-- SIMPAN TRANSAKSI -->
                         <button type="button"
                                 class="btn btn-success"
                                 id="btnSimpan"
                                 style="min-width: 220px;">
-                            Simpan Transaksi
+                            Simpan
                         </button>
 
-                        <!-- CETAK NOTA: khusus cetak tampilan halaman bayar -->
-                        <button type="button"
-                                class="btn btn-info text-white"
-                                id="btnCetak"
-                                style="min-width: 220px;">
+                        <!-- CETAK NOTA: SELALU AKTIF, CETAK ORDER TERAKHIR -->
+                        <a href="<?= base_url('kasir/nota'); ?>"
+                           target="_blank"
+                           class="btn btn-info text-white"
+                           style="min-width: 220px;">
                             Cetak Nota
-                        </button>
+                        </a>
 
+                        <!-- KEMBALI -->
                         <a href="<?= base_url('kasir'); ?>"
                            class="btn btn-secondary"
+                           id="btnKembali"
                            style="min-width: 220px;">
                             Kembali
                         </a>
+
+                        <!-- BATAL -->
+                        <button type="button"
+                                class="btn btn-danger"
+                                id="btnBatalBayar"
+                                style="min-width: 220px;">
+                            Batal
+                        </button>
+
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -197,78 +201,10 @@ $tanggal   = date('d-m-Y');
 </form>
 
 <script>
-    // tombol metode pembayaran
-    const metodeButtons = document.querySelectorAll('.metode-btn');
-    const metodeHidden  = document.getElementById('metode');
-    const metodeInputH  = document.getElementById('input-metode-hidden');
-
-    const inputBayar    = document.getElementById('input-bayar');
-    const inputKembali  = document.getElementById('input-kembalian');
-
-    const totalHarusBayar = <?= (float)$total; ?>;
-
-    const formBayar    = document.getElementById('formBayar');
-    const bayarHidden  = document.getElementById('input-bayar-hidden');
-    const kembaliHidden= document.getElementById('input-kembali-hidden');
-
-    function formatRupiah(num) {
-        num = Number(num) || 0;
-        return 'Rp ' + num.toLocaleString('id-ID');
-    }
-
-    function parseNumber(str) {
-        if (!str) return 0;
-        return Number(str.replace(/\D/g, '')) || 0;
-    }
-
-    // set default
-    inputBayar.value   = formatRupiah(totalHarusBayar);
-    inputKembali.value = formatRupiah(0);
-
-    // ganti metode
-    metodeButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            metodeButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-
-            const m = this.getAttribute('data-metode');
-            metodeHidden.value = m;
-            metodeInputH.value = m;
-        });
-    });
-
-    // hitung kembalian saat nominal bayar berubah
-    inputBayar.addEventListener('input', function () {
-        const nilai = parseNumber(this.value);
-        this.value  = nilai ? formatRupiah(nilai) : '';
-
-        const kembali = nilai - totalHarusBayar;
-        inputKembali.value = formatRupiah(kembali > 0 ? kembali : 0);
-    });
-
-    // SIMPAN TRANSAKSI
-    document.getElementById('btnSimpan').addEventListener('click', function () {
-        const nilaiBayar = parseNumber(inputBayar.value);
-        if (nilaiBayar < totalHarusBayar) {
-            alert('Nominal bayar kurang dari total yang harus dibayar.');
-            return;
-        }
-
-        const kembali = nilaiBayar - totalHarusBayar;
-
-        bayarHidden.value   = nilaiBayar;
-        kembaliHidden.value = kembali > 0 ? kembali : 0;
-
-        if (!confirm('Simpan transaksi ini?')) {
-            return;
-        }
-
-        formBayar.submit();
-    });
-    document.getElementById('btnCetak').addEventListener('click', function () {
-    window.print();
-});
-
+    // kirim nilai dari PHP ke JS global (dipakai di kasir_bayar.js)
+    window.totalHarusBayar = <?= (float)$total; ?>;
+    window.baseUrlKasir    = "<?= base_url('kasir'); ?>";
 </script>
+<script src="<?= base_url('assets/js/kasir_bayar.js'); ?>"></script>
 
 <?= $this->endSection(); ?>

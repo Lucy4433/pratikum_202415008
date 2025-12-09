@@ -75,7 +75,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="/LaporanKasir">
+                <a class="nav-link" href="/laporankasir">
                     <i class="typcn typcn-chart-bar menu-icon"></i>
                     <span class="menu-title">Laporan</span>
                 </a>
@@ -88,6 +88,12 @@
                 </a>
             </li>
 
+             <li class="nav-item">
+                <a class="nav-link" href="/UserKasir">
+                    <i class="typcn typcn-briefcase menu-icon"></i>
+                    <span class="menu-title">User</span>
+                </a>
+            </li>
 
         <?php endif; ?>
     </ul>

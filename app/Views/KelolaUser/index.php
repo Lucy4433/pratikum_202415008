@@ -11,27 +11,38 @@
                         Tambah, ubah, aktif/nonaktifkan, dan hapus akun kasir.
                     </small>
                 </div>
-                <a href="<?= base_url('KelolaUser/tambah'); ?>" 
-                class="btn btn-primary btn-sm">
-                    + Tambah Kasir
-                </a>
+                  <button type="button"
+                            class="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalTambahKasir">
+                        + Tambah Kasir
+                    </button>
 
             </div>
 
             <div class="card-body">
 
-                <!-- FLASH MESSAGE -->
+                <!-- nontifikasi berhasil/tidak -->
                 <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert alert-success">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <?= session()->getFlashdata('success'); ?>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close"></button>
                     </div>
                 <?php endif; ?>
 
                 <?php if (session()->getFlashdata('error')): ?>
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <?= session()->getFlashdata('error'); ?>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close"></button>
                     </div>
                 <?php endif; ?>
+
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover align-middle">
@@ -70,13 +81,13 @@
 
                                             <!-- Tombol Aktif/Nonaktif -->
                                             <?php if ($status === 'aktif'): ?>
-                                                <a href="<?= base_url('UserAdmin/kasir/nonaktif/' . $row->id_user); ?>"
+                                                <a href="<?= base_url('KelolaUser/nonaktif/' . $row->id_user); ?>"
                                                    class="btn btn-outline-secondary btn-sm"
                                                    onclick="return confirm('Nonaktifkan kasir ini?');">
                                                     Nonaktif
                                                 </a>
                                             <?php else: ?>
-                                                <a href="<?= base_url('UserAdmin/kasir/aktif/' . $row->id_user); ?>"
+                                                <a href="<?= base_url('KelolaUser/aktif/' . $row->id_user); ?>"
                                                    class="btn btn-outline-success btn-sm"
                                                    onclick="return confirm('Aktifkan kasir ini?');">
                                                     Aktifkan
@@ -84,7 +95,7 @@
                                             <?php endif; ?>
 
                                             <!-- Tombol Hapus -->
-                                            <a href="<?= base_url('UserAdmin/kasir/hapus/' . $row->id_user); ?>"
+                                            <a href="<?= base_url('KelolaUser/hapus/' . $row->id_user); ?>"
                                                class="btn btn-danger btn-sm"
                                                onclick="return confirm('Yakin hapus kasir ini?');">
                                                 Hapus
@@ -100,7 +111,7 @@
                                          aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
-                                                <form action="<?= base_url('UserAdmin/kasir/ubah/' . $row->id_user); ?>" method="post">
+                                                <form action="<?= base_url('KelolaUser/ubah/' . $row->id_user); ?>" method="post">
                                                     <?= csrf_field(); ?>
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="modalEditKasirLabel<?= $row->id_user; ?>">
@@ -130,13 +141,23 @@
                                                                    required>
                                                         </div>
 
-                                                        <div class="mb-3">
+                                                       <div class="mb-3">
                                                             <label class="form-label">Password Baru</label>
-                                                            <input type="password"
-                                                                   name="password"
-                                                                   class="form-control"
-                                                                   placeholder="Kosongkan jika tidak diganti">
+                                                            <div class="input-group">
+                                                                <input type="password"
+                                                                    name="password"
+                                                                    id="passwordEdit_<?= $row->id_user ?>"
+                                                                    class="form-control"
+                                                                    placeholder="Kosongkan jika tidak diganti">
+
+                                                                <button type="button"
+                                                                        class="btn btn-outline-secondary"
+                                                                        onclick="togglePassword('passwordEdit_<?= $row->id_user ?>', this)">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </div>
                                                         </div>
+
 
                                                         <div class="mb-3">
                                                             <label class="form-label">Status</label>
@@ -179,5 +200,25 @@
         </div>
     </div>
 </div>
+
+<script> //mata password
+function togglePassword(id, btn) {
+    const input = document.getElementById(id);
+    const icon  = btn.querySelector('i');
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+</script>
+
+
+<?= view('KelolaUser/tambah'); ?>
 
 <?= $this->endSection(); ?>

@@ -83,7 +83,6 @@ class LaporanKasir extends BaseController
             'laporanTransaksi'   => $laporanTransaksi,
         ];
 
-        // ❗ PENTING: view 'laporankasir/index' → file app/Views/laporankasir/index.php
         return view('laporankasir/index', $data);
     }
 

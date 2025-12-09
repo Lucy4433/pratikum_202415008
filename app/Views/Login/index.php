@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Login - Phone Store</title>
 
+    <!-- ICON FONT AWESOME untuk ikon mata -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         body {
             background: #F5F7FF;
@@ -34,6 +38,37 @@
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        /* ====== WRAPPER KHUSUS PASSWORD (BIAR IKON DI DALAM KOTAK) ====== */
+        .password-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            padding: 10px 40px 10px 10px; /* ruang kanan untuk ikon */
+            margin-bottom: 0;              /* supaya tidak dobel jarak */
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .password-toggle i {
+            font-size: 16px;
         }
 
         .btn-login {
@@ -67,8 +102,23 @@
         <form action="<?= base_url('login/proses') ?>" method="post">
             <?= csrf_field() ?>
 
+            <!-- USERNAME -->
             <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
+
+            <!-- PASSWORD + IKON MATA -->
+            <div class="password-wrapper">
+                <input type="password"
+                       name="password"
+                       id="password"
+                       placeholder="Password"
+                       required>
+
+                <button type="button"
+                        class="password-toggle"
+                        onclick="togglePassword('password', this)">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
 
             <button type="submit" class="btn-login">Login</button>
         </form>
@@ -77,6 +127,25 @@
             Hubungi admin jika Anda tidak memiliki akun.
         </p>
     </div>
+
+    <script>
+    function togglePassword(id, btn) {
+        const input = document.getElementById(id);
+        const icon  = btn.querySelector('i');
+
+        if (!input) return;
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+    </script>
 
 </body>
 </html>

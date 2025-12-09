@@ -23,25 +23,34 @@ $routes->group('kasir', function($routes){
     $routes->get('transaksi', 'Kasir::transaksi');
     $routes->post('bayar', 'Kasir::bayar');
     $routes->post('simpan', 'Kasir::simpan');
-    $routes->get('kasir/nota/(:num)', 'Kasir::nota/$1');
-
+     $routes->get('nota', 'Kasir::nota');
+    $routes->get('nota/(:num)', 'Kasir::nota/$1');
 });
 
 $routes->group('UserAdmin', function($routes){
     $routes->get('/', 'UserAdmin::index');
     $routes->post('updateProfil', 'UserAdmin::updateProfil');
+    $routes->post('updateFoto', 'UserAdmin::updateFoto');
+});
+
+$routes->group('UserKasir', function($routes){
+    $routes->get('/', 'UserKasir::index');
+    $routes->post('updateProfil', 'UserKasir::updateProfil');
+    $routes->post('updatePassword', 'UserKasir::updatePassword');
+    $routes->post('updateFoto', 'UserAdmin::updateFoto');
 });
 
 $routes->group('KelolaUser', function($routes){
     $routes->get('/', 'KelolaUser::index');
-    $routes->post('tambah', 'KelolaUser::tambahKasir');
-    $routes->post('ubah/(:num)', 'KelolaUser::ubahKasir/$1');
-    $routes->get('nonaktif/(:num)', 'KelolaUser::nonaktifKasir/$1');
-    $routes->get('aktif/(:num)', 'KelolaUser::aktifKasir/$1');
-    $routes->get('hapus/(:num)', 'KelolaUser::hapusKasir/$1');
+    $routes->post('tambah', 'KelolaUser::tambah'); 
+    $routes->post('ubah/(:num)', 'KelolaUser::ubah/$1');
+    $routes->get('nonaktif/(:num)', 'KelolaUser::nonaktif/$1');
+    $routes->get('aktif/(:num)', 'KelolaUser::aktif/$1');
+    $routes->get('hapus/(:num)', 'KelolaUser::hapus/$1');
 });
 
-$routes->group('kasir', function($routes){
+
+$routes->group('kasir', function($routes){ //modul Kasir POS (scanner, transaksi, nota, pembayaran).
     $routes->post('tambah', 'KasirController::tambah');
     $routes->post('ubah/(:num)', 'KasirController::ubah/$1');
     $routes->get('hapus/(:num)', 'KasirController::hapus/$1');
@@ -55,7 +64,7 @@ $routes->group('LaporanAdmin', function($routes){
     $routes->get('detail/(:num)', 'LaporanAdmin::detail/$1'); 
 });
 
-$routes->group('LaporanKasir', function($routes){
+$routes->group('laporankasir', function($routes){
     $routes->get('/', 'LaporanKasir::index');
     $routes->get('pdf', 'LaporanKasir::pdf');
     $routes->get('detail/(:num)', 'LaporanKasir::detail/$1'); 

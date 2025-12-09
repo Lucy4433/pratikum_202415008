@@ -22,44 +22,49 @@ class Login extends BaseController
     }
 
     // PROSES LOGIN
-    public function proses()
+   public function proses()
     {
-        $username = $this->request->getPost('username');
-        $password = $this->request->getPost('password');
+    $username = $this->request->getPost('username');
+    $password = $this->request->getPost('password');
 
-        // CARI USER
-        $user = $this->userModel->where('username', $username)->first();
+    // CARI USER BERDASARKAN USERNAME
+    $user = $this->userModel->where('username', $username)->first();
 
-        if (!$user) {
-            return redirect()->back()->with('error', 'Username tidak ditemukan.');
-        }
-
-        // CEK PASSWORD
-        if ($user->password !== $password) {
-            return redirect()->back()->with('error', 'Password salah.');
-        }
-
-        // SET SESSION
-        session()->set([
-            'login'     => true,
-            'id_user'   => $user->id_user,
-            'username'  => $user->username,
-            'nama'  => $user->nama,
-            'role'      => $user->role,
-        ]);
-
-        // REDIRECT BERDASARKAN ROLE
-        if ($user->role === 'admin') {
-            return redirect()->to('/dashboard');
-        } else {
-            return redirect()->to('/kasir');
-        }
+    if (!$user) {
+        return redirect()->back()->with('error', 'Username tidak ditemukan.');
     }
 
-    // LOGOUT
+    // CEK PASSWORD (masih plain text sesuai DB-mu)
+    if ($user->password !== $password) {
+        return redirect()->back()->with('error', 'Password salah.');
+    }
+
+    // ⛔ CEK STATUS AKUN
+    if (isset($user->status) && $user->status === 'nonaktif') {
+        return redirect()->back()->with('error', 'Akun Anda dinonaktifkan. Hubungi admin.');
+    }
+
+    // SET SESSION
+    session()->set([
+        'login'    => true,
+        'id_user'  => $user->id_user,
+        'username' => $user->username,
+        'nama'     => $user->nama,
+        'role'     => $user->role,
+        'foto'     => $user->foto, //unutk header profil
+    ]);
+
+    // REDIRECT BERDASARKAN ROLE
+    if ($user->role === 'admin') {
+        return redirect()->to('/dashboard');
+    } else {
+        return redirect()->to('/kasir');
+    }
+    }
     public function logout()
-    {
-        session()->destroy();
-        return redirect()->to('/login');
-    }
+{
+    session()->destroy();
+    return redirect()->to('/login');
+}
+
 }

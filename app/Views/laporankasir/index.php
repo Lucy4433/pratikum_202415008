@@ -109,7 +109,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- tidak ada tombol edit / hapus -->
             </div>
         </div>
     </div>

@@ -1,6 +1,10 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 
+<?php
+$foto = !empty($kasir->foto) ? $kasir->foto : 'default.png';
+?>
+
 <div class="row mt-4">
     <!-- ========== NOTIFIKASI (LEBAR PENUH) ========== -->
     <div class="col-12 mb-2">
@@ -19,50 +23,50 @@
         <?php endif; ?>
     </div>
 
-    <!-- ========== KOLOM KIRI: FOTO PROFIL ========== -->
+    <!-- ========== KOLOM KIRI: FOTO PROFIL KASIR ========== -->
     <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0">Foto Profil</h5>
+                <h5 class="mb-0">Foto Profil Kasir</h5>
             </div>
             <div class="card-body text-center">
 
                 <!-- PREVIEW FOTO PROFIL -->
                 <div class="mb-3">
-                    <img src="<?= !empty($admin->foto)
-                            ? base_url('uploads/user/' . $admin->foto)
-                            : base_url('assets/images/default-profile.png'); ?>"
-                         alt="Foto Profil"
+                    <img src="<?= base_url('assets/images/foto_user/' . $foto); ?>"
+                         alt="Foto Kasir"
                          class="img-thumbnail rounded-circle"
                          style="width: 150px; height: 150px; object-fit: cover;">
                 </div>
 
-                <h6 class="mb-1"><?= esc($admin->nama ?? 'Nama Admin'); ?></h6>
-                <small class="text-muted d-block mb-3">
-                    <?= esc(ucfirst($admin->role ?? 'admin')); ?>
+                <h6 class="mb-1"><?= esc($kasir->nama ?? 'Nama Kasir'); ?></h6>
+                <small class="text-muted d-block mb-1">
+                    <?= esc(ucfirst($kasir->role ?? 'kasir')); ?>
                 </small>
 
-                <!-- FORM EDIT FOTO (HANYA TOMBOL EDIT) -->
-                <form id="formFotoAdmin"
-                      action="<?= base_url('UserAdmin/updateFoto'); ?>"
+                <?php if (!empty($kasir->status)): ?>
+                    <small class="badge bg-<?= $kasir->status === 'aktif' ? 'success' : 'secondary'; ?> mb-3">
+                        <?= esc(ucfirst($kasir->status)); ?>
+                    </small>
+                <?php endif; ?>
+
+                <!-- FORM EDIT FOTO (AUTO SUBMIT) -->
+                <form id="formFotoKasir"
+                      action="<?= base_url('UserKasir/updateFoto'); ?>"
                       method="post"
                       enctype="multipart/form-data">
                     <?= csrf_field(); ?>
-
-                    <!-- id_user kalau mau ikut dikirim (opsional, karena bisa dari session juga) -->
-                    <input type="hidden" name="id_user" value="<?= esc($admin->id_user); ?>">
-
                     <!-- input file disembunyikan, dipicu lewat tombol Edit Foto -->
                     <input type="file"
                            name="foto"
-                           id="inputFotoAdmin"
+                           id="inputFotoKasir"
                            accept="image/*"
                            style="display: none;"
-                           onchange="submitFotoAdmin()">
+                           onchange="submitFotoKasir()">
 
                     <button type="button"
                             class="btn btn-outline-primary btn-sm"
-                            onclick="pilihFotoAdmin()">
+                            onclick="pilihFotoKasir()">
                         Edit Foto
                     </button>
 
@@ -75,20 +79,19 @@
         </div>
     </div>
 
-    <!-- ========== KOLOM KANAN: FORM PROFIL ADMIN ========== -->
+    <!-- ========== KOLOM KANAN: PROFIL & PASSWORD KASIR ========== -->
     <div class="col-md-8">
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Profil Admin</h4>
-                <small class="text-muted">Kelola data akun administrator</small>
+                <h4 class="mb-0">Profil Kasir</h4>
+                <small class="text-muted">Kelola data akun kasir</small>
             </div>
 
             <div class="card-body">
 
-                <!-- FORM PROFIL ADMIN -->
-                <form action="<?= base_url('UserAdmin/updateProfil'); ?>" method="post">
+                <!-- ========== FORM PROFIL KASIR (NAMA) ========== -->
+                <form action="<?= base_url('UserKasir/updateProfil'); ?>" method="post" class="mb-4">
                     <?= csrf_field(); ?>
-                    <input type="hidden" name="id_user" value="<?= esc($admin->id_user); ?>">
 
                     <!-- ROLE (readonly) -->
                     <div class="mb-3 row">
@@ -96,7 +99,7 @@
                         <div class="col-md-9">
                             <input type="text"
                                    class="form-control"
-                                   value="<?= esc($admin->role ?? 'admin'); ?>"
+                                   value="<?= esc($kasir->role ?? 'kasir'); ?>"
                                    readonly>
                         </div>
                     </div>
@@ -108,22 +111,35 @@
                             <input type="text"
                                    name="nama"
                                    class="form-control"
-                                   value="<?= esc($admin->nama ?? ''); ?>"
-                                   placeholder="Masukkan nama lengkap admin">
+                                   value="<?= esc($kasir->nama ?? ''); ?>"
+                                   placeholder="Masukkan nama lengkap kasir"
+                                   required>
                         </div>
                     </div>
 
-                    <!-- USERNAME -->
+                    <!-- USERNAME (READONLY) -->
                     <div class="mb-3 row">
                         <label class="col-md-3 col-form-label">Username</label>
                         <div class="col-md-9">
                             <input type="text"
-                                   name="username"
                                    class="form-control"
-                                   value="<?= esc($admin->username ?? ''); ?>"
-                                   required>
+                                   value="<?= esc($kasir->username ?? ''); ?>"
+                                   readonly>
                         </div>
                     </div>
+
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-primary">
+                            Simpan Profil
+                        </button>
+                    </div>
+                </form>
+
+                <hr>
+
+                <!-- ========== FORM GANTI PASSWORD KASIR ========== -->
+                <form action="<?= base_url('UserKasir/updatePassword'); ?>" method="post">
+                    <?= csrf_field(); ?>
 
                     <!-- PASSWORD LAMA -->
                     <div class="mb-3 row">
@@ -134,7 +150,8 @@
                                        name="password_lama"
                                        id="password_lama"
                                        class="form-control"
-                                       placeholder="Isi untuk verifikasi saat ganti password">
+                                       placeholder="Isi untuk verifikasi saat ganti password"
+                                       required>
                                 <button class="btn btn-outline-secondary"
                                         type="button"
                                         onclick="togglePassword('password_lama', this)">
@@ -153,7 +170,8 @@
                                        name="password_baru"
                                        id="password_baru"
                                        class="form-control"
-                                       placeholder="Kosongkan jika tidak ganti password">
+                                       placeholder="Minimal 6 karakter"
+                                       required>
                                 <button class="btn btn-outline-secondary"
                                         type="button"
                                         onclick="togglePassword('password_baru', this)">
@@ -172,7 +190,8 @@
                                        name="password_konfirmasi"
                                        id="password_konfirmasi"
                                        class="form-control"
-                                       placeholder="Ulangi password baru">
+                                       placeholder="Ulangi password baru"
+                                       required>
                                 <button class="btn btn-outline-secondary"
                                         type="button"
                                         onclick="togglePassword('password_konfirmasi', this)">
@@ -182,21 +201,21 @@
                         </div>
                     </div>
 
-                    <!-- TOMBOL SIMPAN -->
-                    <div class="mt-4 text-end">
-                        <button type="submit" class="btn btn-primary">
-                            Simpan Perubahan
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-warning">
+                            Simpan Password Baru
                         </button>
                     </div>
 
                 </form>
+
             </div>
         </div>
     </div>
 </div>
 
 <script>
-/* Tombol mata password */
+// Tombol mata password (sama seperti admin)
 function togglePassword(id, btn) {
     const input = document.getElementById(id);
     const icon  = btn.querySelector('i');
@@ -214,17 +233,17 @@ function togglePassword(id, btn) {
     }
 }
 
-/* ==== FOTO PROFIL: PILIH & SUBMIT OTOMATIS ==== */
-function pilihFotoAdmin() {
-    const input = document.getElementById('inputFotoAdmin');
+// ==== FOTO PROFIL: PILIH & SUBMIT OTOMATIS (KASIR) ====
+function pilihFotoKasir() {
+    const input = document.getElementById('inputFotoKasir');
     if (input) {
         input.click();
     }
 }
 
-function submitFotoAdmin() {
-    const form = document.getElementById('formFotoAdmin');
-    const input = document.getElementById('inputFotoAdmin');
+function submitFotoKasir() {
+    const form = document.getElementById('formFotoKasir');
+    const input = document.getElementById('inputFotoKasir');
 
     if (form && input && input.files.length > 0) {
         form.submit();

@@ -43,9 +43,16 @@ $profil      = $profilModel->first();
     <ul class="navbar-nav d-flex align-items-center m-0">
       <li class="nav-item nav-profile dropdown">
         <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="dropdown" id="profileDropdown" style="color:white !important;">
-          <img src="<?= base_url('assets/images/faces/face5.jpg') ?>" alt="profile"
-               style="width:40px; height:40px; border-radius:50%; object-fit:cover; margin-right:8px;"/>
-
+          <?php
+            // ambil foto dari session
+            $foto = session('foto');
+            // tentukan path foto
+            $fotoUrl = $foto
+                ? base_url('uploads/user/' . $foto)                 // jika user punya foto
+                : base_url('assets/images/foto_user/default.png'); 
+            ?>
+            <img src="<?= $fotoUrl ?>" alt="profile"
+                style="width:40px; height:40px; border-radius:50%; object-fit:cover; margin-right:8px;"/>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
           <!-- PROFIL TOKO → BUKA MODAL -->
           <a class="dropdown-item"
@@ -70,11 +77,17 @@ $profil      = $profilModel->first();
 
       <!-- TANGGAL -->
       <li class="nav-item nav-date dropdown">
-        <a class="nav-link d-flex justify-content-center align-items-center" href="javascript:;" style="color:white !important;">
-          <h6 class="date mb-0" style="color:white !important;">Today : Mar 23</h6>
+        <a class="nav-link d-flex justify-content-center align-items-center"
+          href="javascript:;" style="color:white !important;">
+
+          <h6 class="date mb-0" style="color:white !important;">
+            Today : <?= date('d M Y'); ?>
+          </h6>
+
           <i class="typcn typcn-calendar ms-2" style="color:white !important;"></i>
         </a>
       </li>
+
 
       <!-- PESAN -->
       <li class="nav-item dropdown">

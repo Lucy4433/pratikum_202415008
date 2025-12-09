@@ -59,11 +59,13 @@
 @media (max-width:767px){ .stat-num { font-size:1.25rem; } }
 </style>
 
-<div class="card-header d-flex justify-content-between mb-3">
+<div class="card-header d-flex justify-content-between mb-3"> <!--Membuat header card yang isinya dibagi kiri dan kanan-->
     <h4>Daftar Diskon Produk</h4>
-    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahModal">
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahModal"> 
+        <!--data-bs-toggle="modal" = perintah Bootstrap untuk membuka modal.
+            data-bs-target="#tambahModal" = modal yang dibuka bernama tambahModal.-->
         + Tambah Diskon
-    </button>
+    </button> <!--untuk form diskon-->
 </div>
 
 <div class="card-body">
@@ -72,7 +74,7 @@
     <div class="row stat-row">
         <div class="col-md-3 col-6 mb-3">
             <div class="stat-card stat-purple">
-                <div class="stat-num"><?= esc($stats['active'] ?? 0) ?></div>
+                <div class="stat-num"><?= esc($stats['active'] ?? 0) ?></div> <!--menmapilkan angka diskon aktif-->
                 <div class="stat-title">Diskon Aktif</div>
                 <div class="stat-note">Jumlah diskon yang sedang aktif hari ini</div>
             </div>
@@ -80,7 +82,7 @@
 
         <div class="col-md-3 col-6 mb-3">
             <div class="stat-card stat-orange">
-                <div class="stat-num"><?= esc($stats['upcoming'] ?? 0) ?></div>
+                <div class="stat-num"><?= esc($stats['upcoming'] ?? 0) ?></div> <!--menampilkan angak dsikon yg tidak aktif-->
                 <div class="stat-title">Belum Dimulai</div>
                 <div class="stat-note">Diskon yang belum mulai</div>
             </div>
@@ -88,7 +90,7 @@
 
         <div class="col-md-3 col-6 mb-3">
             <div class="stat-card stat-red">
-                <div class="stat-num"><?= esc($stats['expired'] ?? 0) ?></div>
+                <div class="stat-num"><?= esc($stats['expired'] ?? 0) ?></div> <!--menampilkan angka diskon expired-->
                 <div class="stat-title">Expired</div>
                 <div class="stat-note">Diskon yang sudah lewat</div>
             </div>
@@ -96,7 +98,7 @@
 
         <div class="col-md-3 col-6 mb-3">
             <div class="stat-card stat-blue">
-                <div class="stat-num"><?= esc($stats['no_discount'] ?? 0) ?></div>
+                <div class="stat-num"><?= esc($stats['no_discount'] ?? 0) ?></div> <!--menampilkan angak produk yg blm diskon-->
                 <div class="stat-title">Produk Belum Diskon</div>
                 <div class="stat-note">Jumlah produk yang belum memiliki diskon</div>
             </div>
@@ -106,18 +108,18 @@
 
     <!-- Notifikasi sukses -->
     <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?= session()->getFlashdata('success') ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-success alert-dismissible fade show" role="alert"> //membuat nontifikasi berwarna hijau
+            <?= session()->getFlashdata('success') ?> //tampilan sukses
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button> //tombol X
         </div>
     <?php endif; ?>
 
     <!-- Notifikasi error -->
-    <?php if (session()->getFlashdata('errors')):
+    <?php if (session()->getFlashdata('errors')): // megecek data error di controller
         $errors = session()->getFlashdata('errors'); ?>
-        <div class="alert alert-danger">
+        <div class="alert alert-danger"> <!--nonftikasi merah-->
             <ul class="mb-0">
-                <?php foreach ($errors as $error): ?>
+                <?php foreach ($errors as $error): ?> <!--baris 122-124 looping data yang eror-->
                     <li><?= esc($error) ?></li>
                 <?php endforeach; ?>
             </ul>
@@ -137,31 +139,31 @@
             </tr>
         </thead>
         <tbody>
-            <?php if (!empty($discount)): ?>
-                <?php foreach ($discount as $key => $d): ?>
+            <?php if (!empty($discount)): ?> <!--cek data-->
+                <?php foreach ($discount as $key => $d): ?> <!--Mengambil setiap item diskon dari database-->
                     <tr>
-                        <td class="text-center"><?= $key + 1 ?></td>
-                        <td><?= esc($d->nama_produk ?? '-') ?></td>
-                        <td class="text-center"><?= esc($d->besaran) ?>%</td>
-                        <td class="text-center"><?= esc($d->dari_date) ?></td>
-                        <td class="text-center"><?= esc($d->sampai_date) ?></td>
-                        <td class="text-center"><?= esc($d->status ?? '-') ?></td>
+                        <td class="text-center"><?= $key + 1 ?></td> <!--tampilan nomor urut-->
+                        <td><?= esc($d->nama_produk ?? '-') ?></td> <!--menampilkan nama produk yang medapatkan diskon-->
+                        <td class="text-center"><?= esc($d->besaran) ?>%</td> <!--Menampilkan angka diskon, misalnya 10%, 25%.-->
+                        <td class="text-center"><?= esc($d->dari_date) ?></td> <!--Menampilkan tanggal kapan diskon mulai berlaku-->
+                        <td class="text-center"><?= esc($d->sampai_date) ?></td> <!--Menampilkan tanggal kapan diskon berakhir-->
+                        <td class="text-center"><?= esc($d->status ?? '-') ?></td> <!--Menampilkan status diskon: aktif, belum dimulai, expired-->
                         <td class="text-center">
                             <div class="action-group">
 
                                 <!-- Edit (oranye) - buka modal edit -->
                                 <button type="button"
                                         class="action-circle btn-orange"
-                                        data-bs-toggle="modal"
+                                        data-bs-toggle="modal" 
                                         data-bs-target="#editModal-<?= esc($d->id_discount) ?>"
-                                        title="Edit Diskon">
+                                        title="Edit Diskon"> <!-- birs 157 membuka pop up, brus 159 memagil modal edt sesuai id_discount-->
                                     <img src="https://img.icons8.com/ios-filled/50/edit--v1.png" class="icon" alt="edit">
                                 </button>
 
                                 <!-- Hapus (merah) - form POST dengan CSRF -->
                                 <form method="post" action="<?= base_url('discount/hapus') ?>" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus diskon ini?')">
                                     <?= csrf_field() ?>
-                                    <input type="hidden" name="id" value="<?= esc($d->id_discount) ?>">
+                                    <input type="hidden" name="id" value="<?= esc($d->id_discount) ?>">  <!-- Mengirim ID diskon yang mau dihapus ke serve-->
                                     <button type="submit" class="action-circle btn-red" title="Hapus Diskon">
                                         <img src="https://img.icons8.com/fluency/20/delete-trash.png" class="icon" alt="hapus">
                                     </button>
@@ -174,17 +176,17 @@
                     <!-- Modal Edit Diskon -->
                     <div class="modal fade" id="editModal-<?= esc($d->id_discount) ?>" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-md modal-dialog-centered">
-                            <div class="modal-content">
+                            <div class="modal-content"> <!-- bris 176-179 jendala pop up -->
                                 <div class="modal-header bg-warning">
                                     <h5 class="modal-title">Ubah Diskon</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
+                                </div> <!-- header modal brs 180-183 -->
 
-                                <form action="<?= base_url('discount/ubah/' . esc($d->id_discount)) ?>" method="post">
-                                    <?= csrf_field() ?>
+                                <form action="<?= base_url('discount/ubah/' . esc($d->id_discount)) ?>" method="post"> <!--mengirim data ke controller mengubah diskon tertentu dengan metode post-->
+                                    <?= csrf_field() ?> 
                                     <div class="modal-body">
 
-                                        <input type="hidden" name="id_discount" value="<?= esc($d->id_discount) ?>">
+                                        <input type="hidden" name="id_discount" value="<?= esc($d->id_discount) ?>"> <!-- sistem tahu id discount mana yang di edit-->
 
                                         <div class="mb-3">
                                             <label class="form-label">Produk</label>
@@ -208,7 +210,7 @@
                                                    max="100"
                                                    value="<?= esc($d->besaran) ?>"
                                                    required>
-                                        </div>
+                                        </div> <!-- bris 204-213 input besaran dsikon-->
 
                                         <div class="mb-3">
                                             <label class="form-label">Periode Diskon</label>
@@ -226,7 +228,7 @@
                                                            class="form-control form-control-sm"
                                                            value="<?= esc($d->sampai_date) ?>"
                                                            required>
-                                                </div>
+                                                </div> <!-- tgl diskon mulai dan selesai -->
                                             </div>
                                         </div>
 
@@ -251,7 +253,7 @@
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="7" class="text-center">Belum ada data diskon.</td>
+                    <td colspan="7" class="text-center">Belum ada data diskon.</td> <!--menampilkan pesan jika kosong-->
                 </tr>
             <?php endif; ?>
         </tbody>
@@ -259,60 +261,7 @@
 </div>
 
 <!-- Modal Tambah Diskon -->
-<div class="modal fade" id="tambahModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-dialog-centered">
-        <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Diskon Produk</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <form action="/discount/tambah" method="post" id="formTambahDiskon">
-                <?= csrf_field() ?>
-
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Produk</label>
-                        <select name="id_produk" class="form-select form-select-sm" required>
-                            <option value="">-- Pilih Produk --</option>
-                            <?php foreach ($produk as $p): ?>
-                                <option value="<?= esc($p->id_produk) ?>"><?= esc($p->nama_produk) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Besaran Diskon (%)</label>
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text">%</span>
-                            <input type="number" name="besaran" class="form-control form-control-sm" min="0" max="100" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Periode Diskon</label>
-                        <div class="row g-2">
-                            <div class="col">
-                                <label class="form-label small text-muted">Mulai</label>
-                                <input type="date" name="dari_date" class="form-control form-control-sm" required>
-                            </div>
-                            <div class="col">
-                                <label class="form-label small text-muted">Selesai</label>
-                                <input type="date" name="sampai_date" class="form-control form-control-sm" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success btn-sm">Simpan</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
+<?= view('discount/tambah'); ?>
 
 <?= $this->endSection() ?>

@@ -30,7 +30,7 @@ class KelolaUser extends BaseController
     // TAMBAH KASIR BARU
     public function tambah()
     {
-        if ($this->request->getMethod() !== 'post') {
+        if ($this->request->getMethod() !== 'POST') {
             return redirect()->to(base_url('KelolaUser'));
         }
 
@@ -64,10 +64,17 @@ class KelolaUser extends BaseController
             ->with('success', 'User kasir berhasil ditambahkan.');
     }
 
+        public function formTambah()
+        {
+            // hanya untuk menampilkan form tambah kasir
+            return view('KelolaUser/tambah');
+        }
+
+
     // UBAH DATA KASIR
     public function ubah($id = null)
     {
-        if ($this->request->getMethod() !== 'post' || !$id) {
+        if ($this->request->getMethod() !== 'POST' || !$id) {
             return redirect()->to(base_url('KelolaUser'));
         }
 

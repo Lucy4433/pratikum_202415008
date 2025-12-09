@@ -85,7 +85,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($laporanTransaksi ?? [])): ?>
+                            <?php if (!empty($laporanTransaksi ?? [])): ?>  
                                 <?php $no = 1; foreach ($laporanTransaksi as $row): ?>
                                     <tr>
                                         <td class="text-center"><?= $no++; ?></td>
@@ -111,7 +111,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- tidak ada tombol edit / hapus -->
             </div>
         </div>
     </div>
