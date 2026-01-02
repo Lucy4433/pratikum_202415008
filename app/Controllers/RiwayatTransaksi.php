@@ -9,45 +9,44 @@ class RiwayatTransaksi extends BaseController
 {
     public function index()
     {
-        $orders = new OrdersModel();
+        $orders = new OrdersModel(); //mengambil data riwayat transaksi
 
         // ambil filter
-        $tanggal = $this->request->getGet('tanggal');
-        $keyword = $this->request->getGet('q');
+        $tanggal = $this->request->getGet('tanggal'); //untuk filter tanggal transaksi
+        $keyword = $this->request->getGet('q'); //kata kunci pencarian (no penjualan / nama kasir)
 
         // query dasar + join user + pembayaran
         $orders->select('
                 orders.*,
                 user.username,
                 pembayaran.metode_pembayaran
-            ')
-            ->join('user', 'user.id_user = orders.id_user', 'left')
-            ->join('pembayaran', 'pembayaran.id_order = orders.id_order', 'left')
-            ->orderBy('orders.tanggal_order', 'DESC');
+            ') //data orders + username kasir + metode pembayaran untuk ditampilkan dalam riwayat transaksi
+
+            ->join('user', 'user.id_user = orders.id_user', 'left') //Menggabungkan data order dengan data kasir
+            ->join('pembayaran', 'pembayaran.id_order = orders.id_order', 'left') //Menggabungkan order dengan tabel pembayaran
+            ->orderBy('orders.tanggal_order', 'DESC'); //Urutkan transaksi dari yang terbaru
 
         // filter tanggal (kalau diisi)
         if ($tanggal) {
-            $orders->where('DATE(orders.tanggal_order)', $tanggal);
+            $orders->where('DATE(orders.tanggal_order)', $tanggal); //Filter tanggal
         }
 
         // filter pencarian (no transaksi / nama kasir)
         if ($keyword) {
             $orders->groupStart()
-                   ->like('orders.no_penjualan', $keyword)
-                   ->orLike('user.username', $keyword)
+                   ->like('orders.no_penjualan', $keyword) //cari berdasarkan nomor penjualan
+                   ->orLike('user.username', $keyword) //atau berdasarkan username kasir
                    ->groupEnd();
         }
 
-        $data['riwayat'] = $orders->findAll();
-        $data['tanggal'] = $tanggal;
-        $data['q']       = $keyword;
+        //Kirim data ke view riwaya
+        $data['riwayat'] = $orders->findAll(); //berisi semua data transaksi (setelah filter & join tadi)
+        $data['tanggal'] = $tanggal; //menyimpan nilai filter tanggal yang dipilih use
+        $data['q']       = $keyword; //menyimpan keyword pencarian (no penjualan / nama kasir)
 
-        return view('RiwayatTransaksi/index', $data);
+        return view('RiwayatTransaksi/index', $data); //menampilkan halaman view
     }
 
-    /**
-     * Dipanggil via fetch() untuk isi pop-up detail (JSON).
-     */
     public function detail($id_order = null)
 {
     if (!$this->request->isAJAX()) {

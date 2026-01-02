@@ -189,7 +189,7 @@ class Kasir extends BaseController
             ->select('orders.*, user.username AS nama_kasir')
             ->join('user', 'user.id_user = orders.id_user', 'left')
             ->where('orders.id_order', $idOrder)
-            ->first();
+            ->first();  
 
         if (!$order) {
             return redirect()->to(base_url('kasir'))
@@ -210,9 +210,9 @@ class Kasir extends BaseController
         ->first();
 
     return view('kasir/nota', [
-        'order'      => $order,
-        'detail'     => $detail,
-        'pembayaran' => $pembayaran,
+        'order'      => (array) $order,
+        'detail'     => array_map(function($d) { return (array) $d; }, $detail),
+        'pembayaran' => (array) $pembayaran,
     ]);
 }
 

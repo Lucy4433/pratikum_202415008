@@ -25,12 +25,33 @@ $suppliers = $suppliers ?? $model ?? [];
 .table thead th:last-child, .table tbody td:last-child { width:18%; }
 </style>
 
-<div class="card-header d-flex justify-content-between mb-3">
-    <h4>Daftar Supplier</h4>
-    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahModal">
-        + Tambah Supplier
-    </button>
+<div class="card-header mb-3">
+    <h4 class="mb-3">Daftar Supplier</h4>
+
+    <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+        <!-- SEARCH PRODUK -->
+        <form action="<?= base_url('supplier') ?>" method="get" class="d-flex gap-2">
+            <input type="text"
+                   name="q"
+                   class="form-control form-control-sm"
+                   placeholder="Cari produk (contoh: iPhone 14)"
+                   style="width:260px"
+                   value="<?= esc(service('request')->getGet('q')) ?>"
+
+            <button type="submit" class="btn btn-outline-secondary btn-sm">
+                Cari
+            </button>
+        </form>
+
+        <!-- TAMBAH SUPPLIER -->
+        <button class="btn btn-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#tambahModal">
+            + Tambah Supplier
+        </button>
+    </div>
 </div>
+
 
 <div class="card-body">
 
@@ -74,21 +95,37 @@ $suppliers = $suppliers ?? $model ?? [];
                         <td class="text-center"><?= esc($s->no_telp) ?></td>
                         <td class="text-center">
                             <div class="action-group">
+                                <!-- DETAIL (👁) -->
+                                <a href="<?= base_url('supplier/detail/' . $s->id_suplier) ?>"
+                                class="action-circle"
+                                style="background:#4e73df"
+                                title="Detail Supplier">
+                                    <img src="https://img.icons8.com/ios-filled/50/visible--v1.png"
+                                        class="icon" alt="detail">
+                                </a>
+
                                 <!-- Edit (bundar) -->
                                 <button type="button"
                                         class="action-circle btn-orange"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editModal-<?= esc($s->id_suplier) ?>"
                                         title="Ubah Supplier">
-                                    <img src="https://img.icons8.com/ios-filled/50/edit--v1.png" class="icon" alt="edit">
+                                    <img src="https://img.icons8.com/ios-filled/50/edit--v1.png"
+                                        class="icon" alt="edit">
                                 </button>
 
                                 <!-- Hapus (bundar) -->
-                                <form action="<?= base_url('supplier/hapus') ?>" method="post" class="d-inline" onsubmit="return confirm('Hapus supplier ini?')">
+                                <form action="<?= base_url('supplier/hapus') ?>"
+                                    method="post"
+                                    class="d-inline"
+                                    onsubmit="return confirm('Hapus supplier ini?')">
                                     <?= csrf_field() ?>
                                     <input type="hidden" name="id" value="<?= esc($s->id_suplier) ?>">
-                                    <button type="submit" class="action-circle btn-red" title="Hapus Supplier">
-                                        <img src="https://img.icons8.com/fluency/20/delete-trash.png" class="icon" alt="hapus">
+                                    <button type="submit"
+                                            class="action-circle btn-red"
+                                            title="Hapus Supplier">
+                                        <img src="https://img.icons8.com/fluency/20/delete-trash.png"
+                                            class="icon" alt="hapus">
                                     </button>
                                 </form>
                             </div>

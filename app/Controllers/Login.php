@@ -19,13 +19,14 @@ class Login extends BaseController
     public function index()
     {
         return view('login/index');
-    }
+    } //Tampilkan halaman login
 
     // PROSES LOGIN
    public function proses()
     {
     $username = $this->request->getPost('username');
     $password = $this->request->getPost('password');
+    //Ambil input username & password
 
     // CARI USER BERDASARKAN USERNAME
     $user = $this->userModel->where('username', $username)->first();
@@ -34,37 +35,37 @@ class Login extends BaseController
         return redirect()->back()->with('error', 'Username tidak ditemukan.');
     }
 
-    // CEK PASSWORD (masih plain text sesuai DB-mu)
+    // Cek apakah password benar
     if ($user->password !== $password) {
         return redirect()->back()->with('error', 'Password salah.');
     }
 
-    // ⛔ CEK STATUS AKUN
+    // Cek status akun aktif / nonaktif
     if (isset($user->status) && $user->status === 'nonaktif') {
         return redirect()->back()->with('error', 'Akun Anda dinonaktifkan. Hubungi admin.');
     }
 
-    // SET SESSION
+    // Simpat data pengguna ke dalam session supaya sistem tahu siapa yang login
     session()->set([
-        'login'    => true,
+        'isLoggedIn'    => true,
         'id_user'  => $user->id_user,
         'username' => $user->username,
         'nama'     => $user->nama,
         'role'     => $user->role,
-        'foto'     => $user->foto, //unutk header profil
+        'foto'     => $user->foto, 
     ]);
 
-    // REDIRECT BERDASARKAN ROLE
+    // Arahkan user berdasarkan role
     if ($user->role === 'admin') {
-        return redirect()->to('/dashboard');
+        return redirect()->to('/dashboard'); //aadmin → masuk ke dashboard admin
     } else {
-        return redirect()->to('/kasir');
+        return redirect()->to('/kasir'); //kasir → masuk ke halaman kasir
     }
     }
     public function logout()
 {
     session()->destroy();
     return redirect()->to('/login');
-}
+} //Hapus semua session, lalu kembali ke halaman login
 
 }

@@ -7,10 +7,13 @@
 <div class="row">
     <div class="col-md-4">
         <div class="card">
-            <form action="/merek/tambah" method="post" style="margin: 15px;">
+            <form action="<?= base_url('merek'); ?>" method="post" style="margin: 15px;">
                 <div class="form-group">
                     <label for="">Merek</label>
                     <input type="text" name="nama_merek" class="form-control form-control-sm" placeholder="" aria-describedby="helpId">
+                    <?php if (isset($validation) && $validation->hasError('nama_merek')): ?>
+                        <div class="text-danger"><?= $validation->getError('nama_merek') ?></div>
+                    <?php endif; ?>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-sm">Simpan</button>

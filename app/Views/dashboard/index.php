@@ -94,9 +94,9 @@
                                         <td class="text-center"><?= $no++; ?></td> <!--tampilan nomor urut otomatis transaksi baru pertama-->
                                         <td>
                                             <?php
-                                                $tgl = $row['tanggal_order'] ?? null; //tgl dari data bases
-                                                echo $tgl ? date('d-m-Y H:i', strtotime($tgl)) : '-'; //tampilan format tgl
-                                            ?>
+                                                $tgl = $row['tanggal_order'] ?? null; //tgl nilai tanggal order 
+                                                echo $tgl ? date('d-m-Y H:i', strtotime($tgl)) : '-'; //tampilan format tgl dan jam
+                                            ?> <!-- kolom nomor baris 97-99-->
                                         </td>
                                         <td><?= esc($row['no_penjualan'] ?? '-'); ?></td> <!--menampilkan nomor nota-->
                                         <td><?= esc($row['username'] ?? '-'); ?></td> <!--menampilkan user kasir-->
@@ -105,10 +105,10 @@
                                         </td>
                                         <td><?= esc($row['metode_pembayaran'] ?? '-'); ?></td> <!--menampilkan metode pembayaran-->
                                     </tr>
-                                <?php endforeach; ?> //tutup looping transaksi
+                                <?php endforeach; ?> 
                             <?php else: ?> <!--jika tidak ada data-->
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted"> //pesan jika tabel kosong
+                                    <td colspan="6" class="text-center text-muted"> <!--pesan jika tabel kosong-->
                                         Belum ada data transaksi yang ditampilkan.  <!---pesan ini yang akan tampil jika data kosmg-->
                                     </td>
                                 </tr>

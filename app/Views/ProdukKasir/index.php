@@ -4,7 +4,7 @@
 <div class="card-header d-flex justify-content-between mb-3">
     <h4>Daftar Produk HP (Kasir)</h4>
     <span class="badge bg-secondary align-self-center">Read Only</span>
-</div>
+</div> <!--header baris 4-7-->
 
 <div class="card-body">
     <p class="text-muted" style="font-size: .85rem;">

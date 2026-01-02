@@ -16,51 +16,73 @@ class Merek extends BaseController
     }
 
     public function index()
-    {
-        $data['model'] =  $this->model->findAll();
-        return view('merek/index', $data);
-    }
+{
+    $data['model'] =  $this->model->findAll(); //mengambil seluruh data merek dari database
 
-    public function tambah()
-    {
-        if ($this->request->getMethod() == 'POST') {
-            $rules = [
-                'nama_merek' => [
-                    'label' => 'Nama Merek',
-                    'rules' => 'required|is_unique[merek.nama_merek]',
-                    'errors' => [
-                        'required' => '{field} harus diisi.',
-                        'is_unique' => '{field} sudah ada di database.'
-                    ]
-                ]
-            ];
+    if ($this->request->getMethod() == 'POST') { //Cek apakah form dikirim
+        $rules = [
+            'nama_merek' => [
+                'label' => 'Nama Merek',
+                'rules' => 'required|is_unique[merek.nama_merek]',
+                'errors' => [
+                    'required' => '{field} harus diisi.',
+                    'is_unique' => '{field} sudah ada di database.'
+                ]//aturan validasi
+            ]
+        ]; 
 
-            // Jalankan validasi
-            if (!$this->validate($rules)) {
-                // Jika validasi gagal, kirim kembali view dengan error
-                return view('merek/tambah', [
-                    'validation' => $this->validator
-                ]);
-            }
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('merek'));
+        // Jalankan validasi
+        if (!$this->validate($rules)) {
+            $data['validation'] = $this->validator; // Simpan error validasi
+        } else {
+            $this->model->save($this->request->getPost()); //Simpan data jika validasi berhasil
+            return redirect()->to(base_url('merek')); //Kembali ke daftar merek setelah data berhasil disimpan
         }
-        return view('merek/tambah');
     }
+
+    return view('merek/index', $data); //Data dikirim ke view merek/index untuk ditampilkan dalam tabel
+}
+
+
+    // public function tambah()
+    // {
+    //     if ($this->request->getMethod() == 'POST') { //Cek apakah form dikirim
+    //         $rules = [
+    //             'nama_merek' => [
+    //                 'label' => 'Nama Merek',
+    //                 'rules' => 'required|is_unique[merek.nama_merek]',
+    //                 'errors' => [
+    //                     'required' => '{field} harus diisi.',
+    //                     'is_unique' => '{field} sudah ada di database.'
+    //                 ]//aturan validasi
+    //             ]
+    //         ]; 
+
+    //         // Jalankan validasi
+    //         if (!$this->validate($rules)) {
+    //             return view('merek', [
+    //                 'validation' => $this->validator
+    //             ]); //// Jika validasi gagal, kirim kembali view dengan error
+    //         }
+    //         $this->model->save($this->request->getPost()); //Simpan data jika validasi berhasil
+    //         return redirect()->to(base_url('merek')); //Kembali ke daftar merek setelah data berhasil disimpan
+    //     }
+    //     return view('merek/index'); //Menampilkan form tambah merek
+    // }
 
     public function ubah($id = null)
     {
-        if ($this->request->getMethod() == 'POST') {
-            $this->model->save($this->request->getPost());
-            return redirect()->to(base_url('merek'));
+        if ($this->request->getMethod() == 'POST') { //Cek apakah form edit dikirim
+            $this->model->save($this->request->getPost()); //update data merek berdasarkan id
+            return redirect()->to(base_url('merek')); //Kembali ke daftar merek
         }
-        $data['model'] =  $this->model->where('id_merek', $id)->first();
-        return view('merek/ubah', $data);
+        $data['model'] =  $this->model->where('id_merek', $id)->first(); //Jika belum simpan → ambil data lama
+        return view('merek/ubah', $data); //Tampilkan form edit
     }
 
     public function hapus($id = null)
     {
-        $this->model->delete($id);
-        return redirect()->to(base_url('merek'));
+        $this->model->delete($id); //Hapus data berdasarkan ID
+        return redirect()->to(base_url('merek')); //Setelah data terhapus, user diarahkan kembali ke halaman daftar merek
     }
 }

@@ -41,14 +41,14 @@
 
 <div class="card-header d-flex justify-content-between mb-3">
     <h4>Daftar Produk HP</h4>
-    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahModal">
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahModal"> 
         + Tambah Produk
     </button>
-</div>
+</div> <!--header baris 42-47-->
 
 <div class="card-body">
     <table class="table table-bordered table-hover">
-        <thead class="table-dark text-center">
+        <thead class="table-dark text-center"> <!--stlye daftar produk hp-->
             <tr>
                 <th width="6%">No</th>
                 <th>Nama Produk</th>
@@ -60,25 +60,25 @@
             </tr>
         </thead>
         <tbody>
-            <?php if (!empty($produk)): ?>
+            <?php if (!empty($produk)): ?> <!--cek data produk-->
                 <?php foreach ($produk as $key => $p): ?>
                     <tr>
-                        <td class="text-center"><?= $key + 1 ?></td>
-                        <td><?= esc($p->nama_produk) ?></td>
-                        <td><?= esc($p->nama_merek ?? '-') ?></td>
-                        <td>Rp <?= number_format($p->harga ?? 0, 0, ',', '.') ?></td>
+                        <td class="text-center"><?= $key + 1 ?></td> <!--Ambil satu per satu data produk dari array $produk-->
+                        <td><?= esc($p->nama_produk) ?></td>  <!--nomor urut-->
+                        <td><?= esc($p->nama_merek ?? '-') ?></td> <!--tampilan nama produk-->
+                        <td>Rp <?= number_format($p->harga ?? 0, 0, ',', '.') ?></td> <!--format rupiah-->
                         
                         <td class="text-center">
-                            <?= is_numeric($p->stok) ? esc($p->stok) : '0' ?>
+                            <?= is_numeric($p->stok) ? esc($p->stok) : '0' ?> <!--tampilan stok produk-->
                         </td>
-                        <td><?= is_null($p->discount) ? 'Tidak ada Discount' : $p->discount->besaran.'%' ?></td>
+                        <td><?= is_null($p->discount) ? 'Tidak ada Discount' : $p->discount->besaran.'%' ?></td> <!--tamplilan diskon aktif dan tidak-->]
 
                         <td class="text-center">
-                            <div class="action-group">
+                            <div class="action-group"> 
 
                                 <!-- Tombol Edit (bulat) -->
                                 <button class="btn btn-warning action-circle"
-                                        data-bs-toggle="modal"
+                                        data-bs-toggle="modal" 
                                         data-bs-target="#editModal<?= $key ?>">
                                     🖊️
                                 </button>
