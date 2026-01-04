@@ -1,245 +1,116 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 
-<!-- Styles tombol bulat -->
 <style>
-.action-group {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    align-items: center;
+.table thead th {
+    background: #23262a;
+    color: #fff;
+    vertical-align: middle;
 }
-
-/* Tombol bulat */
-.action-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 !important;
+.table tbody td {
+    vertical-align: middle;
 }
-
-/* Icon di dalam tombol */
-.action-circle img.icon {
-    width: 20px;
-    height: 20px;
+.search-box {
+    max-width: 350px;
 }
-
-@media (max-width:480px){
-    .action-circle {
-        width: 34px;
-        height: 34px;
-    }
-    .action-circle img.icon {
-        width: 16px;
-        height: 16px;
-    }
+.note-info {
+    font-size: 13px;
+    color: #6c757d;
+}
+.badge-diskon {
+    background: #1cc88a;
+    font-size: 12px;
 }
 </style>
 
-<div class="card-header d-flex justify-content-between mb-3">
-    <h4>Daftar Produk HP</h4>
-    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahModal"> 
-        + Tambah Produk
-    </button>
-</div> <!--header baris 42-47-->
-
-<div class="card-body">
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark text-center"> <!--stlye daftar produk hp-->
-            <tr>
-                <th width="6%">No</th>
-                <th>Nama Produk</th>
-                <th>Merek</th>
-                <th>Harga</th>
-                <th width="8%">Stok</th>
-                <th width="8%">Discount</th>
-                <th width="18%">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($produk)): ?> <!--cek data produk-->
-                <?php foreach ($produk as $key => $p): ?>
-                    <tr>
-                        <td class="text-center"><?= $key + 1 ?></td> <!--Ambil satu per satu data produk dari array $produk-->
-                        <td><?= esc($p->nama_produk) ?></td>  <!--nomor urut-->
-                        <td><?= esc($p->nama_merek ?? '-') ?></td> <!--tampilan nama produk-->
-                        <td>Rp <?= number_format($p->harga ?? 0, 0, ',', '.') ?></td> <!--format rupiah-->
-                        
-                        <td class="text-center">
-                            <?= is_numeric($p->stok) ? esc($p->stok) : '0' ?> <!--tampilan stok produk-->
-                        </td>
-                        <td><?= is_null($p->discount) ? 'Tidak ada Discount' : $p->discount->besaran.'%' ?></td> <!--tamplilan diskon aktif dan tidak-->]
-
-                        <td class="text-center">
-                            <div class="action-group"> 
-
-                                <!-- Tombol Edit (bulat) -->
-                                <button class="btn btn-warning action-circle"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#editModal<?= $key ?>">
-                                    🖊️
-                                </button>
-
-                                <!-- Tombol Hapus -->
-                                <a href="/produk/hapus/<?= esc($p->id_produk) ?>"
-                                   class="btn btn-danger action-circle"
-                                   onclick="return confirm('Hapus produk ini?')">
-                                    🗑️
-                                </a>
-
-                               <!-- Tombol Discount -->
-                                <a href="/produk/discount/<?= esc($p->id_produk) ?>"
-                                   class="btn btn-info action-circle text-white">
-                                    🏷️
-                                </a>
-
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Modal Edit Produk -->
-                    <div class="modal fade" id="editModal<?= $key ?>" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-md modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Ubah Produk</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-
-                                <form action="/produk/ubah/<?= esc($p->id_produk) ?>" method="post">
-                                    <?= csrf_field() ?>
-                                    <div class="modal-body">
-                                        <input type="hidden" name="id_produk" value="<?= esc($p->id_produk) ?>">
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Nama Produk</label>
-                                            <input type="text" name="nama_produk"
-                                                   class="form-control form-control-sm"
-                                                   value="<?= esc($p->nama_produk) ?>" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Merek</label>
-                                            <select name="id_merek" class="form-select form-select-sm" required>
-                                                <option value="">-- Pilih Merek --</option>
-                                                <?php foreach ($merek as $mr): ?>
-                                                    <option value="<?= esc($mr->id_merek) ?>"
-                                                        <?= ($p->id_merek == $mr->id_merek ? 'selected' : '') ?>>
-                                                        <?= esc($mr->nama_merek) ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Harga</label>
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-text">Rp</span>
-                                                <input type="text" name="harga"
-                                                       class="form-control form-control-sm format-rupiah"
-                                                       value="<?= number_format($p->harga ?? 0, 0, ',', '.') ?>"
-                                                       required>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Stok</label>
-                                            <input type="number" name="stok"
-                                                   class="form-control form-control-sm"
-                                                   min="0"
-                                                   value="<?= is_numeric($p->stok) ? esc($p->stok) : 0 ?>"
-                                                   required>
-                                        </div>
-
-                                        <small class="text-muted">Klik <b>Simpan</b> untuk memperbarui.</small>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>
-
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" class="text-center">Belum ada data produk.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>
-
-<!-- Modal Tambah Produk -->
-<div class="modal fade" id="tambahModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Produk</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<div class="card-header mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="mb-0">Daftar Produk</h4>
+            <div class="note-info">
+                Data diambil otomatis dari supplier (read-only)
             </div>
-
-            <form action="/produk/tambah" method="post">
-                <?= csrf_field() ?>
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        <label class="form-label">Nama Produk</label>
-                        <input type="text" name="nama_produk" class="form-control form-control-sm" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Merek</label>
-                        <select name="id_merek" class="form-select form-select-sm" required>
-                            <option value="">-- Pilih Merek --</option>
-                            <?php foreach ($merek as $mr): ?>
-                                <option value="<?= esc($mr->id_merek) ?>"><?= esc($mr->nama_merek) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Harga</label>
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text">Rp</span>
-                            <input type="text" name="harga"
-                                   class="form-control form-control-sm format-rupiah"
-                                   required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Stok</label>
-                        <input type="number" name="stok" class="form-control form-control-sm" min="0" required>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success btn-sm">Simpan</button>
-                </div>
-
-            </form>
         </div>
     </div>
 </div>
 
-<!-- JS Format Rupiah -->
+<div class="card-body">
+
+    <!-- SEARCH -->
+    <div class="mb-3">
+        <input type="text"
+               id="searchProduk"
+               class="form-control form-control-sm search-box"
+               placeholder="🔍 Cari produk atau merek...">
+    </div>
+
+    <!-- TABEL PRODUK -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="tabelProduk">
+            <thead class="text-center">
+                <tr>
+                    <th width="5%">No</th>
+                    <th>Produk</th>
+                    <th>Merek</th>
+                    <th width="15%">Harga Jual</th>
+                    <th width="12%">Diskon</th>
+                    <th width="10%">Stok</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($produk)): ?>
+                <?php foreach ($produk as $i => $p): ?>
+                    <tr>
+                        <td class="text-center"><?= $i + 1 ?></td>
+
+                        <td><?= esc($p->nama_produk) ?></td>
+
+                        <td><?= esc($p->nama_merek ?? '-') ?></td>
+
+                        <td class="text-end">
+                            Rp <?= number_format($p->harga_jual ?? 0, 0, ',', '.') ?>
+                        </td>
+
+                        <!-- DISKON -->
+                        <td class="text-center">
+                            <?php if (!empty($p->besaran)): ?>
+                                <span class="badge badge-diskon">
+                                    <?= (int)$p->besaran ?>%
+                                </span>
+                            <?php else: ?>
+                                <span class="text-muted">-</span>
+                            <?php endif; ?>
+                        </td>
+
+                        <!-- STOK AKUMULASI -->
+                        <td class="text-center">
+                            <?= (int)$p->stok ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        Belum ada data produk dari supplier.
+                    </td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SEARCH SCRIPT -->
 <script>
-document.querySelectorAll('.format-rupiah').forEach(input => {
-    input.addEventListener('input', function() {
-        let value = this.value.replace(/\D/g, '');
-        this.value = new Intl.NumberFormat('id-ID').format(value);
+document.getElementById('searchProduk').addEventListener('keyup', function () {
+    let keyword = this.value.toLowerCase();
+    let rows = document.querySelectorAll('#tabelProduk tbody tr');
+
+    rows.forEach(function (row) {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(keyword) ? '' : 'none';
     });
 });
 </script>
 
-<?= $this->endSection() ?>
+<?= $this->endSection(); ?>

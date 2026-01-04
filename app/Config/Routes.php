@@ -129,11 +129,6 @@ $routes->group('pembelian', ['filter' => 'auth'], function($routes){
 
 $routes->group('produk', ['filter' => 'auth'], function($routes){
     $routes->get('/', 'Produk::index');
-    $routes->get('tambah', 'Produk::tambah');
-    $routes->post('tambah', 'Produk::tambah');
-    $routes->post('ubah/(:num)', 'Produk::ubah/$1'); 
-    $routes->get('hapus/(:num)', 'Produk::hapus/$1');
-    $routes->get('discount/(:num)', 'Discount::index/$1');
 });
 
 $routes->group('profiltoko', ['filter' => 'auth'], function($routes){
@@ -149,6 +144,7 @@ $routes->group('supplier', ['filter' => 'auth'], function($routes){
     $routes->get('detail/(:num)', 'Supplier::detail/$1');
     $routes->post('tambah-produk', 'Supplier::tambahProduk');
     $routes->post('update-produk', 'Supplier::updateProduk');
+    $routes->post('hapus-produk', 'Supplier::hapusProduk');
 });
 
 $routes->group('user', ['filter' => 'auth'], function($routes){

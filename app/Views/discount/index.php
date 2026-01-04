@@ -192,12 +192,16 @@
                                             <label class="form-label">Produk</label>
                                             <select name="id_produk" class="form-select form-select-sm" required>
                                                 <option value="">-- Pilih Produk --</option>
-                                                <?php foreach ($produk as $p): ?>
-                                                    <option value="<?= esc($p->id_produk) ?>"
-                                                        <?= ($p->id_produk == $d->id_produk ? 'selected' : '') ?>>
-                                                        <?= esc($p->nama_produk) ?>
-                                                    </option>
-                                                <?php endforeach; ?>
+                                                <?php if (!empty($produk)): ?>
+                                                    <?php foreach ($produk as $p): ?>
+                                                        <option value="<?= esc($p->id_produk) ?>"
+                                                            <?= ($p->id_produk == $d->id_produk ? 'selected' : '') ?>>
+                                                            <?= esc($p->nama_produk) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <option value="">Belum ada produk supplier</option>
+                                                <?php endif; ?>
                                             </select>
                                         </div>
 

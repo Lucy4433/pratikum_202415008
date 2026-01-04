@@ -56,7 +56,7 @@ class Supplier extends BaseController
         return view('supplier/index', $data); //tampilan halaaman supplier dengan data yang sudah dikirm
     }
 
-    public function detail($id)
+    public function detail($id) //detail_supplier
     {
         $supplier = $this->model->getById($id);
 
@@ -76,33 +76,126 @@ class Supplier extends BaseController
 
     public function tambahProduk()
     {
-    $this->supplierProduk->insert([
-        'id_supplier' => $this->request->getPost('id_supplier'),
-        'id_produk'   => $this->request->getPost('id_produk'),
-        'harga_beli'  => $this->request->getPost('harga_beli'),
-        'harga_jual'  => $this->request->getPost('harga_jual'),
-        'diskon'      => $this->request->getPost('diskon'),
-        'stok'        => $this->request->getPost('stok'),
-    ]);
+        // simpan produk supplier
+        $this->supplierProduk->insert([
+            'id_supplier' => $this->request->getPost('id_supplier'),
+            'id_produk'   => $this->request->getPost('id_produk'),
+            'harga_beli'  => $this->request->getPost('harga_beli'),
+            'harga_jual'  => $this->request->getPost('harga_jual'),
+            'stok'        => $this->request->getPost('stok'),
+            'id_discount' => null,
+        ]);
 
-    return redirect()->back()->with('success', 'Produk supplier berhasil ditambahkan.');
+        $supplierProdukId = $this->supplierProduk->insertID();
+
+        // data diskon
+        $namaDiskon = $this->request->getPost('nama_discount');
+        $persen     = $this->request->getPost('persen');
+        $dariDate   = $this->request->getPost('dari_date');
+        $sampaiDate = $this->request->getPost('sampai_date');
+
+        // simpan diskon JIKA LENGKAP
+        if ($namaDiskon && $persen > 0 && $dariDate && $sampaiDate) {
+
+            $discountModel = new \App\Models\DiscountModel();
+
+            $discountModel->insert([
+                'id_produk'     => $this->request->getPost('id_produk'),
+                'nama_discount' => $namaDiskon,
+                'persen'        => $persen,
+                'dari_date'     => $dariDate,
+                'sampai_date'   => $sampaiDate,
+                'status'        => 1,
+            ]);
+
+            $this->supplierProduk->update($supplierProdukId, [
+                'id_discount' => $discountModel->insertID()
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Produk supplier berhasil ditambahkan.');
     }
 
     public function updateProduk()
     {
-    $this->supplierProduk->update(
-        $this->request->getPost('id_supplier_produk'),
-        [
+        $idSupplierProduk = $this->request->getPost('id_supplier_produk');
+        $idProduk         = $this->request->getPost('id_produk');
+
+        // update produk supplier
+        $this->supplierProduk->update($idSupplierProduk, [
             'harga_beli' => $this->request->getPost('harga_beli'),
             'harga_jual' => $this->request->getPost('harga_jual'),
-            'diskon'     => $this->request->getPost('diskon'),
             'stok'       => $this->request->getPost('stok'),
-        ]
-    );
+        ]);
 
-    return redirect()->back()->with('success', 'Produk supplier berhasil diperbarui.');
+        // DATA DISKON
+        $idDiscount = $this->request->getPost('id_discount');
+        $persen     = (int) $this->request->getPost('persen');
+        $dariDate   = $this->request->getPost('dari_date');
+        $sampaiDate = $this->request->getPost('sampai_date');
+
+        $discountModel = new \App\Models\DiscountModel();
+
+        // =========================
+        // JIKA DISKON DIISI
+        // =========================
+        if ($persen > 0 && $dariDate && $sampaiDate) {
+
+            if ($idDiscount) {
+                // UPDATE DISKON
+                $discountModel->update($idDiscount, [
+                    'besaran'     => $persen,
+                    'dari_date'   => $dariDate,
+                    'sampai_date' => $sampaiDate,
+                ]);
+            } else {
+                // INSERT DISKON BARU
+                $discountModel->insert([
+                    'id_produk'   => $idProduk,
+                    'besaran'     => $persen,
+                    'dari_date'   => $dariDate,
+                    'sampai_date' => $sampaiDate,
+                ]);
+
+                $this->supplierProduk->update($idSupplierProduk, [
+                    'id_discount' => $discountModel->insertID()
+                ]);
+            }
+
+        } 
+        // =========================
+        // JIKA DISKON DIHAPUS
+        // =========================
+        else {
+            if ($idDiscount) {
+                $discountModel->delete($idDiscount);
+            }
+
+            $this->supplierProduk->update($idSupplierProduk, [
+                'id_discount' => null
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Produk supplier & diskon berhasil diperbarui.');
     }
 
+
+
+    public function hapusProduk()
+    {
+    $id = $this->request->getPost('id_supplier_produk');
+
+    if (! $id) {
+        return redirect()->back()
+            ->with('errors', ['ID produk supplier tidak valid.']);
+    }
+
+    // HANYA hapus item produk dari supplier
+    $this->supplierProduk->delete($id);
+
+    return redirect()->back()
+        ->with('success', 'Item produk berhasil dihapus dari supplier.');
+    }
 
     public function tambah()
     {

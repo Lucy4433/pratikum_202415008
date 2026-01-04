@@ -30,7 +30,7 @@
                         <td class="text-center"><?= $key + 1 ?></td>
                         <td><?= esc($p->nama_produk) ?></td>
                         <td><?= esc($p->nama_merek ?? '-') ?></td>
-                        <td>Rp <?= number_format($p->harga ?? 0, 0, ',', '.') ?></td>
+                        <td>Rp <?= number_format($p->harga_jual ?? 0, 0, ',', '.') ?></td>
 
                         <td class="text-center">
                             <?= is_numeric($p->stok) ? esc($p->stok) : '0' ?>
@@ -38,7 +38,7 @@
 
                         <td class="text-center">
                             <?php if (!empty($p->discount)): ?>
-                                <?= esc($p->discount->besaran ?? 0) ?>%
+                                <?= esc($p->$p->besaran_diskon ?? 0) ?>%
                             <?php else: ?>
                                 Tidak ada Discount
                             <?php endif; ?>

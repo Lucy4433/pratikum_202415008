@@ -8,42 +8,62 @@ class ProdukModel extends Model
 {
     protected $table            = 'produk';
     protected $primaryKey       = 'id_produk';
-    protected $useAutoIncrement = true;
     protected $returnType       = 'object';
-    protected $useSoftDeletes   = false;
+    protected $useAutoIncrement = true;
     protected $protectFields    = true;
 
-    
-    protected $allowedFields    = ['id_produk', 'id_merek', 'nama_produk', 'harga', 'stok'];
+    protected $allowedFields = [
+        'id_merek',
+        'nama_produk'
+    ];
 
-    protected bool $allowEmptyInserts = false;
-    protected bool $updateOnlyChanged = true;
-
-    protected array $casts = [];
-    protected array $castHandlers = [];
-
-    public function getById($id = null): object
+    /**
+     * ==================================================
+     * PRODUK READ-ONLY (UNTUK MENU PRODUK ADMIN)
+     * - HANYA produk yang ada di supplier_produk
+     * - Stok = SUM dari semua supplier
+     * - Diskon = dari tabel discount 
+     * ==================================================
+     */
+    public function getProdukReadOnly()
     {
-        return $this->db->table($this->table)
-            ->select('produk.*, merek.nama_merek')
-            ->join('merek', 'merek.id_merek = produk.id_merek', 'left')
-            ->where('produk.id_produk', $id)
-            ->get()
-            ->getRow();
-    }
+        return $this->db->table('supplier_produk sp')
+            ->select([
+                'p.id_produk',
+                'p.nama_produk',
+                'm.nama_merek',
 
-    public function getProdukWithMerek()
-    {
-        return $this->db->table($this->table)
-            ->select('produk.*, merek.nama_merek')
-            ->join('merek', 'merek.id_merek = produk.id_merek', 'left')
-            ->orderBy('produk.id_produk', 'DESC')
+                // harga jual tertinggi (aman untuk admin)
+                'MAX(sp.harga_jual) AS harga_jual',
+
+                // total stok dari semua supplier
+                'SUM(sp.stok) AS stok',
+
+                // diskon (jika ada)
+                'MAX(d.besaran) AS besaran_diskon',
+                'MAX(d.dari_date) AS dari_date',
+                'MAX(d.sampai_date) AS sampai_date',
+            ])
+            ->join('produk p', 'p.id_produk = sp.id_produk')
+            ->join('merek m', 'm.id_merek = p.id_merek', 'left')
+            ->join('discount d', 'd.id_discount = sp.id_discount', 'left')
+            ->groupBy([
+                'p.id_produk',
+                'p.nama_produk',
+                'm.nama_merek'
+            ])
+            ->orderBy('p.nama_produk', 'ASC')
             ->get()
             ->getResult();
     }
 
-    public function updateProduk($id, $data)
+    public function getById($id)
     {
-        return $this->update($id, $data);
+        return $this->db->table('produk p')
+            ->select('p.*, m.nama_merek')
+            ->join('merek m', 'm.id_merek = p.id_merek', 'left')
+            ->where('p.id_produk', $id)
+            ->get()
+            ->getRow();
     }
 }

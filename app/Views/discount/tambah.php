@@ -15,9 +15,15 @@
                         <label class="form-label">Produk</label>
                         <select name="id_produk" class="form-select form-select-sm" required> <!--dropdown daftarpilihan-->
                             <option value="">-- Pilih Produk --</option> <!-- Jika user tidak memilih produk, form tidak bisa disimpan.-->
-                            <?php foreach ($produk as $p): ?> <!-- Looping (perulangan) untuk menampilkan semua produk dari database-->
-                                <option value="<?= esc($p->id_produk) ?>"><?= esc($p->nama_produk) ?></option>
-                            <?php endforeach; ?>
+                            <?php if (!empty($produk)): ?>
+                                <?php foreach ($produk as $p): ?>
+                                    <option value="<?= esc($p->id_produk) ?>">
+                                        <?= esc($p->nama_produk) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="">Belum ada produk supplier</option>
+                            <?php endif; ?>
                         </select>
                     </div>
 
