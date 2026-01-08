@@ -10,7 +10,7 @@
         </small>
     </div>
     <div class="col-md-4 text-md-end mt-2 mt-md-0">
-        <a href="<?= base_url('laporan/kasir/pdf'); ?>" 
+        <a href="<?= base_url('laporankasir/pdf'); ?>" 
            class="btn btn-sm btn-danger" target="_blank">
             <i class="fa fa-file-pdf-o"></i> Export PDF
         </a>

@@ -6,6 +6,9 @@ use App\Controllers\BaseController;
 use App\Models\OrdersModel;
 use App\Models\DetailOrderModel;
 use App\Models\PembayaranModel;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 class LaporanAdmin extends BaseController
 {
@@ -65,8 +68,38 @@ class LaporanAdmin extends BaseController
     }
 
     public function pdf()
-    {
-        // PDF khusus admin (bisa dibuat nanti)
-        echo "Export PDF Admin.";
-    }
+{
+    $db = \Config\Database::connect();
+
+    $laporan = $db->table('orders')
+        ->select("
+            orders.tanggal_order AS tanggal,
+            orders.no_penjualan AS no_nota,
+            orders.total,
+            pembayaran.metode_pembayaran AS metode,
+            user.username AS kasir
+        ")
+        ->join('user', 'user.id_user = orders.id_user', 'left')
+        ->join('pembayaran', 'pembayaran.id_order = orders.id_order', 'left')
+        ->orderBy('orders.tanggal_order', 'DESC')
+        ->get()->getResultArray();
+
+    $html = view('LaporanAdmin/pdf', [
+        'laporan' => $laporan,
+        'tanggal' => date('d-m-Y')
+    ]);
+
+    $options = new Options();
+    $options->set('isRemoteEnabled', true);
+
+    $dompdf = new Dompdf($options);
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+
+    $dompdf->stream('laporan-transaksi.pdf', [
+        'Attachment' => false
+    ]);
+}
+
 }

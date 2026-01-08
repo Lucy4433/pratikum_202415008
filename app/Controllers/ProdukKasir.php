@@ -16,11 +16,10 @@ class ProdukKasir extends BaseController
     
     public function index()
     {
-        $produk = $this->produkModel->getProdukReadOnly();
+        $data = [
+            'produk' => $this->produkModel->getReadOnlyKasir()
+        ];
 
-        return view('ProdukKasir/index', [
-            'title'  => 'Daftar Produk (Kasir)',
-            'produk' => $produk,
-        ]);
+        return view('ProdukKasir/index', $data);
     }
 }

@@ -15,8 +15,8 @@ class Supplier extends BaseController
     public function __construct()
     {
         $this->model = new SuplierModel();
-            $this->produk = new ProdukModel();
-    $this->supplierProduk = new SupplierProdukModel();
+        $this->produk = new ProdukModel();
+        $this->supplierProduk = new SupplierProdukModel();
 
         helper('form');
     }
@@ -45,180 +45,17 @@ class Supplier extends BaseController
         $data = [
             // kirim data ke view
             'suppliers' => $suppliers,
-            'model'     => $suppliers, 
+            'model'     => $suppliers,
             'stats'     => [
                 'total'            => $total,
                 'with_purchases'   => $withPurchases,
-                'without_purchases'=> $withoutPurchases,
+                'without_purchases' => $withoutPurchases,
             ]
         ];
 
         return view('supplier/index', $data); //tampilan halaaman supplier dengan data yang sudah dikirm
     }
 
-    public function detail($id) //detail_supplier
-    {
-        $supplier = $this->model->getById($id);
-
-        if (! $supplier) {
-            return redirect()->to(base_url('supplier'))
-                ->with('errors', ['Supplier tidak ditemukan.']);
-        }
-
-        $data = [
-            'supplier'       => $supplier,
-            'produkSupplier' => $this->supplierProduk->getBySupplier($id),
-            'produk'         => $this->produk->findAll(),
-        ];
-
-        return view('supplier/detail', $data);
-    }
-
-    public function tambahProduk()
-    {
-        // simpan produk supplier
-        $this->supplierProduk->insert([
-            'id_supplier' => $this->request->getPost('id_supplier'),
-            'id_produk'   => $this->request->getPost('id_produk'),
-            'harga_beli'  => $this->request->getPost('harga_beli'),
-            'harga_jual'  => $this->request->getPost('harga_jual'),
-            'stok'        => $this->request->getPost('stok'),
-            'id_discount' => null,
-        ]);
-
-        $supplierProdukId = $this->supplierProduk->insertID();
-
-        // data diskon
-        $namaDiskon = $this->request->getPost('nama_discount');
-        $persen     = $this->request->getPost('persen');
-        $dariDate   = $this->request->getPost('dari_date');
-        $sampaiDate = $this->request->getPost('sampai_date');
-
-        // simpan diskon JIKA LENGKAP
-        if ($namaDiskon && $persen > 0 && $dariDate && $sampaiDate) {
-
-            $discountModel = new \App\Models\DiscountModel();
-
-            $discountModel->insert([
-                'id_produk'     => $this->request->getPost('id_produk'),
-                'nama_discount' => $namaDiskon,
-                'persen'        => $persen,
-                'dari_date'     => $dariDate,
-                'sampai_date'   => $sampaiDate,
-                'status'        => 1,
-            ]);
-
-            $this->supplierProduk->update($supplierProdukId, [
-                'id_discount' => $discountModel->insertID()
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Produk supplier berhasil ditambahkan.');
-    }
-
-    public function updateProduk()
-    {
-        $idSupplierProduk = $this->request->getPost('id_supplier_produk');
-        $idProduk         = $this->request->getPost('id_produk');
-
-        // update produk supplier
-        $this->supplierProduk->update($idSupplierProduk, [
-            'harga_beli' => $this->request->getPost('harga_beli'),
-            'harga_jual' => $this->request->getPost('harga_jual'),
-            'stok'       => $this->request->getPost('stok'),
-        ]);
-
-        // DATA DISKON
-        $idDiscount = $this->request->getPost('id_discount');
-        $persen     = (int) $this->request->getPost('persen');
-        $dariDate   = $this->request->getPost('dari_date');
-        $sampaiDate = $this->request->getPost('sampai_date');
-
-        $discountModel = new \App\Models\DiscountModel();
-
-        // =========================
-        // JIKA DISKON DIISI
-        // =========================
-        if ($persen > 0 && $dariDate && $sampaiDate) {
-
-            if ($idDiscount) {
-                // UPDATE DISKON
-                $discountModel->update($idDiscount, [
-                    'besaran'     => $persen,
-                    'dari_date'   => $dariDate,
-                    'sampai_date' => $sampaiDate,
-                ]);
-            } else {
-                // INSERT DISKON BARU
-                $discountModel->insert([
-                    'id_produk'   => $idProduk,
-                    'besaran'     => $persen,
-                    'dari_date'   => $dariDate,
-                    'sampai_date' => $sampaiDate,
-                ]);
-
-                $this->supplierProduk->update($idSupplierProduk, [
-                    'id_discount' => $discountModel->insertID()
-                ]);
-            }
-
-        } 
-        // =========================
-        // JIKA DISKON DIHAPUS
-        // =========================
-        else {
-            if ($idDiscount) {
-                $discountModel->delete($idDiscount);
-            }
-
-            $this->supplierProduk->update($idSupplierProduk, [
-                'id_discount' => null
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Produk supplier & diskon berhasil diperbarui.');
-    }
-
-
-
-    public function hapusProduk()
-    {
-    $id = $this->request->getPost('id_supplier_produk');
-
-    if (! $id) {
-        return redirect()->back()
-            ->with('errors', ['ID produk supplier tidak valid.']);
-    }
-
-    // HANYA hapus item produk dari supplier
-    $this->supplierProduk->delete($id);
-
-    return redirect()->back()
-        ->with('success', 'Item produk berhasil dihapus dari supplier.');
-    }
-
-    public function tambah()
-    {
-        if ($this->request->getMethod() !== 'POST') {
-            return view('supplier/tambah');
-        } //Cek apakah user membuka halaman atau menekan tombol SIMPAN
-
-        $rules = [
-            'nama_suplier'   => 'required|min_length[2]|max_length[255]',
-            'alamat' => 'permit_empty|max_length[1000]',
-            'no_telp'=> 'permit_empty|max_length[50]',
-        ]; //Aturan validasi input
-
-        if (! $this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        } //Cek apakah input valid
-
-        $post = $this->request->getPost(['nama_suplier', 'alamat', 'no_telp']); //Ambil data yang sudah lolos validasi
-
-        $this->model->save($post); //Simpan supplier baru
-
-        return redirect()->to(base_url('supplier'))->with('success', 'Suplier berhasil disimpan.'); //Setelah berhasil simpan, kembali ke daftar supplier
-    }
 
     public function ubah($id = null)
     {
@@ -230,13 +67,13 @@ class Supplier extends BaseController
 
             if (! $id) {
                 return redirect()->to(base_url('supplier'))->with('errors', ['ID tidak valid.']);
-            }//Tentukan ID supplier yang mau diubah baris 79-86
+            } //Tentukan ID supplier yang mau diubah baris 79-86
 
-            $rules = [ 
+            $rules = [
                 'nama_suplier'   => 'required|min_length[2]|max_length[255]',
                 'alamat' => 'permit_empty|max_length[1000]',
-                'no_telp'=> 'permit_empty|max_length[50]',
-            ];//aturan validasi input
+                'no_telp' => 'permit_empty|max_length[50]',
+            ]; //aturan validasi input
 
             if (! $this->validate($rules)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -248,17 +85,17 @@ class Supplier extends BaseController
             return redirect()->to(base_url('supplier'))->with('success', 'Suplier berhasil diperbarui.'); //Setelah update berhasil, kembali ke daftar supplier
         }
 
-            if (! $id) {
-                return redirect()->to(base_url('supplier'));
-            } //Kalau ID kosong, jangan tampilkan form, langsung kembali ke daftar.
+        if (! $id) {
+            return redirect()->to(base_url('supplier'));
+        } //Kalau ID kosong, jangan tampilkan form, langsung kembali ke daftar.
 
-            $supplier = $this->model->getById($id);
-            if (! $supplier) {
-                return redirect()->to(base_url('supplier'))->with('errors', ['Supplier tidak ditemukan.']);
-            } //Cari supplier berdasarkan ID
+        $supplier = $this->model->getById($id);
+        if (! $supplier) {
+            return redirect()->to(base_url('supplier'))->with('errors', ['Supplier tidak ditemukan.']);
+        } //Cari supplier berdasarkan ID
 
-            return view('supplier/ubah', ['supplier' => $supplier]);
-        } //Kirim data supplier ke halaman ubah, agar form menampilkan data lama untuk diedit
+        return view('supplier/ubah', ['supplier' => $supplier]);
+    } //Kirim data supplier ke halaman ubah, agar form menampilkan data lama untuk diedit
 
     public function hapus($id = null)
     {

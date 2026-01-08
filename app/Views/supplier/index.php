@@ -95,14 +95,7 @@ $suppliers = $suppliers ?? $model ?? [];
                         <td class="text-center"><?= esc($s->no_telp) ?></td>
                         <td class="text-center">
                             <div class="action-group">
-                                <!-- DETAIL (👁) -->
-                                <a href="<?= base_url('supplier/detail/' . $s->id_suplier) ?>"
-                                class="action-circle"
-                                style="background:#4e73df"
-                                title="Detail Supplier">
-                                    <img src="https://img.icons8.com/ios-filled/50/visible--v1.png"
-                                        class="icon" alt="detail">
-                                </a>
+                                
 
                                 <!-- Edit (bundar) -->
                                 <button type="button"

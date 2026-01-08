@@ -8,7 +8,7 @@
 
 <div class="card-body">
     <p class="text-muted" style="font-size: .85rem;">
-        Halaman ini hanya digunakan untuk melihat daftar produk. 
+        Halaman ini hanya digunakan untuk melihat daftar produk.
         Perubahan data produk dilakukan melalui panel <b>Admin</b>.
     </p>
 
@@ -37,12 +37,13 @@
                         </td>
 
                         <td class="text-center">
-                            <?php if (!empty($p->discount)): ?>
-                                <?= esc($p->$p->besaran_diskon ?? 0) ?>%
+                            <?php if (!empty($p->besaran_diskon)): ?>
+                                <?= esc($p->besaran_diskon) ?>%
                             <?php else: ?>
-                                Tidak ada Discount
+                                Tidak ada diskon
                             <?php endif; ?>
                         </td>
+
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>

@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\DetailOrderModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Detail_order extends BaseController
+class DetailOrder extends BaseController
 {
     protected $model;
 
@@ -20,7 +20,7 @@ class Detail_order extends BaseController
         $data['model'] =  $this->model->findAll(); //ambil semua data tabel detail_order,simpan ke variabel model untuk dikirim ke view.
         return view('detail_order/index', $data); //tampil halaman detail_order/index, sambil bawa data yang diambil.
     }
-    
+
     public function tambah()
     {
         if ($this->request->getMethod() == 'POST') { //megecek form tambah
@@ -37,7 +37,7 @@ class Detail_order extends BaseController
             return redirect()->to(base_url('detail_order')); //simpan, pindah ke halaman daftar
         }
         $data['model'] =  $this->model->where('id_detail_order', $id)->first(); //data id yang sesuai, tampilan di form edit
-        return view('detail_order/ubah', $data);// kembali halaman ubah, berserta data yang diubah
+        return view('detail_order/ubah', $data); // kembali halaman ubah, berserta data yang diubah
     }
 
     public function hapus($id = null) //data hapus, dengan id tertentu

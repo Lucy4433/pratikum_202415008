@@ -6,7 +6,7 @@
                 <i class="typcn typcn-home menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
-            </li>
+        </li>
 
         <?php if (session()->get('role') == 'admin'): ?>
             <li class="nav-item">
@@ -36,17 +36,23 @@
                     <span class="menu-title">Supplier</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/supplierproduk">
+                    <i class="typcn typcn-shopping-cart menu-icon"></i>
+                    <span class="menu-title">Barang Masuk</span>
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="/LaporanAdmin">
-                    <i class="typcn typcn-briefcase menu-icon"></i>
+                    <i class="typcn typcn-book menu-icon"></i>
                     <span class="menu-title">Laporan</span>
                 </a>
             </li>
 
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="/UserAdmin">
-                    <i class="typcn typcn-briefcase menu-icon"></i>
+                    <i class="typcn typcn-user menu-icon"></i>
                     <span class="menu-title">User</span>
                 </a>
             </li>
@@ -60,7 +66,7 @@
 
         <?php endif; ?>
         <?php if (session()->get('role') == 'kasir'): ?>
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="/kasir">
                     <i class="typcn typcn-calculator menu-icon"></i>
                     <span class="menu-title">Kasir</span>
@@ -88,7 +94,7 @@
                 </a>
             </li>
 
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="/UserKasir">
                     <i class="typcn typcn-briefcase menu-icon"></i>
                     <span class="menu-title">User</span>

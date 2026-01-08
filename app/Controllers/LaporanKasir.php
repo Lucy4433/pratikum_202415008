@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use Config\Database;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class LaporanKasir extends BaseController
 {
@@ -87,8 +89,43 @@ class LaporanKasir extends BaseController
     }
 
     public function pdf()
-    {
-        // nanti diisi logika export PDF
-        return 'Export PDF laporan kasir (belum diimplementasi).';
-    }
+{
+    $db      = Database::connect();
+    $session = session();
+
+    $idKasir   = $session->get('id_user');
+    $namaKasir = $session->get('username') ?? 'Kasir';
+
+    $laporan = $db->table('orders')
+        ->select("
+            orders.tanggal_order,
+            orders.no_penjualan,
+            orders.total,
+            pembayaran.metode_pembayaran
+        ")
+        ->join('pembayaran', 'pembayaran.id_order = orders.id_order', 'left')
+        ->where('orders.id_user', $idKasir)
+        ->orderBy('orders.tanggal_order', 'DESC')
+        ->get()
+        ->getResultArray();
+
+    $html = view('laporankasir/pdf', [
+        'laporan'   => $laporan,
+        'tanggal'  => date('d-m-Y'),
+        'namaKasir'=> $namaKasir
+    ]);
+
+    $options = new Options();
+    $options->set('isRemoteEnabled', true);
+
+    $dompdf = new Dompdf($options);
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+
+    $dompdf->stream('laporan-kasir.pdf', [
+        'Attachment' => false
+    ]);
+}
+
 }
